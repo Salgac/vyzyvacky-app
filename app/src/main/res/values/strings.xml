@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Vyzývačky 2.0</string>
+
+    <string name="tooltip">Zaznamenaj súboj:</string>
+    <string name="winner">Víťaz:</string>
+    <string name="looser">Porazený:</string>
+
+    <string name="dummy_text"> </string>
+    <string name="not_imported">Import a database before use</string>
+    <string name="no_database">No database imported</string>
+    <string name="no_entries">No entries to show</string>
+
+    <string name="submit">Zaznamenaj</string>
+    <string name="entry_added">Súboj bol zaznamenaný</string>
+    <string name="entry_failed">Chyba! Súboj nebol zaznamenaný</string>
+
+    <string name="import_data">Import</string>
+    <string name="export">Export</string>
+    <string name="database_view">Zobraz databázu</string>
+    <string name="log_view">Zobraz log</string>
+    <string name="log_delete">Zmaž posledný</string>
+
+    <string name="file_pick">Pick a .xml file</string>
+    <string name="import_ok">Import successful</string>
+    <string name="import_ko">Import failed</string>
+
+
+    <string name="export_ok">Export successful</string>
+    <string name="export_ko">Export failed</string>
+    <string name="id">ID</string>
+    <string name="time">Time</string>
+
+
+</resources>
