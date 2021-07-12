@@ -1,100 +1,89 @@
-package sk.vyzyvacky.data;
+package sk.vyzyvacky.data
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.os.Parcel
+import android.os.Parcelable
+import android.os.Parcelable.Creator
+import sk.vyzyvacky.model.LogEntry
+import sk.vyzyvacky.model.Model
+import java.util.*
 
-import java.util.ArrayList;
+class Data : Parcelable {
+    val log: ArrayList<LogEntry?>?
+    val participants: ArrayList<Model?>?
 
-import sk.vyzyvacky.model.LogEntry;
-import sk.vyzyvacky.model.Model;
-
-public class Data implements Parcelable {
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Data> CREATOR = new Parcelable.Creator<Data>() {
-        @Override
-        public Data createFromParcel(Parcel in) {
-            return new Data(in);
-        }
-
-        @Override
-        public Data[] newArray(int size) {
-            return new Data[size];
-        }
-    };
-    private final ArrayList<LogEntry> log;
-    private final ArrayList<Model> participants;
-
-    public Data() {
-        log = new ArrayList<>();
-        participants = new ArrayList<>();
+    constructor() {
+        log = ArrayList()
+        participants = ArrayList()
     }
 
-    protected Data(Parcel in) {
-        if (in.readByte() == 0x01) {
-            log = new ArrayList<LogEntry>();
-            in.readList(log, LogEntry.class.getClassLoader());
+    protected constructor(`in`: Parcel) {
+        if (`in`.readByte().toInt() == 0x01) {
+            log = ArrayList()
+            `in`.readList(log, LogEntry::class.java.classLoader)
         } else {
-            log = null;
+            log = null
         }
-        if (in.readByte() == 0x01) {
-            participants = new ArrayList<Model>();
-            in.readList(participants, Model.class.getClassLoader());
+        if (`in`.readByte().toInt() == 0x01) {
+            participants = ArrayList()
+            `in`.readList(participants, Model::class.java.classLoader)
         } else {
-            participants = null;
+            participants = null
         }
     }
 
-    public void addEntry(LogEntry entry) {
-        log.add(entry);
+    fun addEntry(entry: LogEntry?) {
+        log!!.add(entry)
     }
 
-    public ArrayList<Model> getParticipants() {
-        return participants;
-    }
-
-    public String getFullParticipantNameByID(String id) {
-        for (int i = 0; i < participants.size(); i++) {
-            if (participants.get(i).getId().equals(id))
-                return participants.get(i).getLastname() + " " + participants.get(i).getFirstname();
+    fun getFullParticipantNameByID(id: String): String? {
+        for (i in participants!!.indices) {
+            if (participants[i]!!.id == id) return participants[i]!!.lastname + " " + participants[i]!!.firstname
         }
-        return null;
+        return null
     }
 
-    public String[] getNamesForAdapter() {
-        String[] names = new String[participants.size()];
-        for (int i = 0; i < participants.size(); i++) {
-            names[i] = participants.get(i).getLastname() + " " + participants.get(i).getFirstname();
+    val namesForAdapter: Array<String?>
+        get() {
+            val names = arrayOfNulls<String>(participants!!.size)
+            for (i in participants.indices) {
+                names[i] = participants[i]!!.lastname + " " + participants[i]!!.firstname
+            }
+            return names
         }
-        return names;
+
+    fun resetLog() {
+        log!!.clear()
     }
 
-    public ArrayList<LogEntry> getLog() {
-        return log;
+    override fun describeContents(): Int {
+        return 0
     }
 
-    public void resetLog() {
-        log.clear();
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    override fun writeToParcel(dest: Parcel, flags: Int) {
         if (log == null) {
-            dest.writeByte((byte) (0x00));
+            dest.writeByte(0x00.toByte())
         } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(log);
+            dest.writeByte(0x01.toByte())
+            dest.writeList(log)
         }
         if (participants == null) {
-            dest.writeByte((byte) (0x00));
+            dest.writeByte(0x00.toByte())
         } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(participants);
+            dest.writeByte(0x01.toByte())
+            dest.writeList(participants)
+        }
+    }
+
+    companion object {
+        @JvmField
+        val CREATOR: Creator<Data?> = object : Creator<Data?> {
+            override fun createFromParcel(`in`: Parcel): Data? {
+                return Data(`in`)
+            }
+
+            override fun newArray(size: Int): Array<Data?> {
+                return arrayOfNulls(size)
+            }
         }
     }
 }

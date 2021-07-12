@@ -1,74 +1,64 @@
-package sk.vyzyvacky.model;
+package sk.vyzyvacky.model
 
-import android.content.Context;
-import android.graphics.Paint;
-import android.util.AttributeSet;
-import android.util.TypedValue;
+import android.content.Context
+import android.graphics.Paint
+import android.util.AttributeSet
+import android.util.TypedValue
+import androidx.appcompat.widget.AppCompatTextView
 
-public class FontFitTextView extends androidx.appcompat.widget.AppCompatTextView {
-
+class FontFitTextView : AppCompatTextView {
     //Attributes
-    private Paint mTestPaint;
+    private var mTestPaint: Paint? = null
 
-    public FontFitTextView(Context context) {
-        super(context);
-        initialise();
+    constructor(context: Context?) : super(context) {
+        initialise()
     }
 
-    public FontFitTextView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initialise();
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+        initialise()
     }
 
-    private void initialise() {
-        mTestPaint = new Paint();
-        mTestPaint.set(this.getPaint());
+    private fun initialise() {
+        mTestPaint = Paint()
+        mTestPaint!!.set(this.paint)
         //max size defaults to the initially specified text size unless it is too small
     }
 
     /* Re size the font so the specified text fits in the text box
      * assuming the text box is the specified width.
      */
-    private void refitText(String text, int textWidth) {
-        if (textWidth <= 0)
-            return;
-        int targetWidth = textWidth - this.getPaddingLeft() - this.getPaddingRight();
-        float hi = 100;
-        float lo = 2;
-        final float threshold = 0.5f; // How close we have to be
-
-        mTestPaint.set(this.getPaint());
-
-        while ((hi - lo) > threshold) {
-            float size = (hi + lo) / 2;
-            mTestPaint.setTextSize(size);
-            if (mTestPaint.measureText(text) >= targetWidth)
-                hi = size; // too big
-            else
-                lo = size; // too small
+    private fun refitText(text: String, textWidth: Int) {
+        if (textWidth <= 0) return
+        val targetWidth = textWidth - this.paddingLeft - this.paddingRight
+        var hi = 100f
+        var lo = 2f
+        val threshold = 0.5f // How close we have to be
+        mTestPaint!!.set(this.paint)
+        while (hi - lo > threshold) {
+            val size = (hi + lo) / 2
+            mTestPaint!!.textSize = size
+            if (mTestPaint!!.measureText(text) >= targetWidth) hi = size // too big
+            else lo = size // too small
         }
         // Use lo so that we undershoot rather than overshoot
-        this.setTextSize(TypedValue.COMPLEX_UNIT_PX, lo);
+        this.setTextSize(TypedValue.COMPLEX_UNIT_PX, lo)
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
-        int height = getMeasuredHeight();
-        refitText(this.getText().toString(), parentWidth);
-        this.setMeasuredDimension(parentWidth, height);
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val parentWidth = MeasureSpec.getSize(widthMeasureSpec)
+        val height = measuredHeight
+        refitText(this.text.toString(), parentWidth)
+        setMeasuredDimension(parentWidth, height)
     }
 
-    @Override
-    protected void onTextChanged(final CharSequence text, final int start, final int before, final int after) {
-        refitText(text.toString(), this.getWidth());
+    override fun onTextChanged(text: CharSequence, start: Int, before: Int, after: Int) {
+        refitText(text.toString(), this.width)
     }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         if (w != oldw) {
-            refitText(this.getText().toString(), w);
+            refitText(this.text.toString(), w)
         }
     }
 }

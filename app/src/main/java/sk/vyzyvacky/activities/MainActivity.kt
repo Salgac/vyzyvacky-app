@@ -41,8 +41,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         initUiViews()
         database = Data()
-        importXML = XMLImport(this, this, database)
-        exportXML = XMLExport(this, this, database)
+        importXML = XMLImport(this, this, database!!)
+        exportXML = XMLExport(this, this, database!!)
         imported = false
         isImporting = false
         isViewing = false
@@ -150,17 +150,17 @@ class MainActivity : AppCompatActivity() {
 
     fun deleteLast() {
         //get last log index
-        val index = database!!.log.size - 1
+        val index = database!!.log!!.size - 1
         if (index < 0) {
             Toast.makeText(this, "No logs to delete.", Toast.LENGTH_LONG).show()
             return
         }
 
         //get Strings
-        val last = database!!.log[index]
-        val time = last.time
-        val winner = database!!.getFullParticipantNameByID(last.winner)
-        val looser = database!!.getFullParticipantNameByID(last.looser)
+        val last = database!!.log?.get(index)
+        val time = last?.time
+        val winner = last?.let { database!!.getFullParticipantNameByID(it.winner) }
+        val looser = last?.let { database!!.getFullParticipantNameByID(it.looser) }
         val context: Context = this
 
         //popup
@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity() {
                 // The dialog is automatically dismissed when a dialog button is clicked.
                 .setPositiveButton(android.R.string.yes) { dialog: DialogInterface?, which: Int ->
                     // Continue with delete operation
-                    database!!.log.removeAt(index)
+                    database!!.log!!.removeAt(index)
                     Toast.makeText(context, "Last log entry removed successfully.", Toast.LENGTH_LONG).show()
                 } // A null listener allows the button to dismiss the dialog and take no further action.
                 .setNegativeButton(android.R.string.no, null)
@@ -197,16 +197,20 @@ class MainActivity : AppCompatActivity() {
         //test the input
         var winnerID: String? = null
         var looserID: String? = null
-        for (i in database!!.participants.indices) {
-            val current = database!!.participants[i]
-            val currentName = current.lastname + " " + current.firstname
+        for (i in database!!.participants?.indices!!) {
+            val current = database!!.participants?.get(i)
+            val currentName = current?.lastname + " " + current?.firstname
             if (winner == currentName) {
                 //found winner
-                winnerID = current.id
+                if (current != null) {
+                    winnerID = current.id
+                }
             }
             if (looser == currentName) {
                 //found looser
-                looserID = current.id
+                if (current != null) {
+                    looserID = current.id
+                }
             }
         }
         if (winnerID == null || looserID == null) {
