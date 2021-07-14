@@ -1,6 +1,11 @@
 package sk.vyzyvacky.utilities
 
 import android.content.Context
+import android.widget.Toast
+import com.android.volley.Request
+import org.json.JSONArray
+import org.json.JSONObject
+import sk.vyzyvacky.R
 import sk.vyzyvacky.model.LogEntry
 import sk.vyzyvacky.model.Participant
 import java.util.*
@@ -10,8 +15,81 @@ class DataHandler(context: Context) {
     private val PREF_ENTRIES: String = "entries"
 
     private var tinyDB = TinyDB(context)
+    private val ctx = context
 
-    fun setParticipants(arr: ArrayList<Participant>) {
+    fun importParticipants() {
+        HttpRequestManager.sendArrayRequest(
+            ctx, null, RequestType.PARTICIPANT, Request.Method.GET,
+            { response: JSONArray, success: Boolean ->
+                if (success) {
+                    val participantArr = ArrayList<Participant>()
+                    for (i in 0 until response.length()) {
+                        val obj = response.getJSONObject(i)
+
+                        val firstname = obj.get("firstName") as String
+                        val lastname = obj.get("lastName") as String
+                        val id = obj.get("id") as Int
+                        val team = obj.get("name") as String
+                        val color = obj.get("color") as String
+
+                        participantArr.add(Participant(id, firstname, lastname, team, color))
+                        Toast.makeText(
+                            ctx,
+                            ctx.resources.getString(R.string.import_ok),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    setParticipants(participantArr)
+                } else {
+                    println("Error: $response")
+                    Toast.makeText(
+                        ctx,
+                        ctx.resources.getString(R.string.import_ko),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            },
+        )
+    }
+
+    fun exportEntries() {
+        val log = getEntries()
+        val jsonArr = JSONArray()
+
+        //write entries into JSONArray
+        for (entry in log) {
+            val obj = JSONObject()
+            obj.put("time", entry.time)
+            obj.put("winner", entry.winner)
+            obj.put("looser", entry.looser)
+
+            jsonArr.put(obj)
+        }
+
+        //send
+        HttpRequestManager.sendArrayRequest(ctx, jsonArr, RequestType.ENTRY, Request.Method.POST,
+            { response: JSONArray, success: Boolean ->
+                if (success) {
+                    //delete entries from database
+                    removeEntries()
+                    Toast.makeText(
+                        ctx,
+                        ctx.resources.getString(R.string.export_ok),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    //print error message and carry on
+                    println("Error: $response")
+                    Toast.makeText(
+                        ctx,
+                        ctx.resources.getString(R.string.export_ko),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
+    }
+
+    private fun setParticipants(arr: ArrayList<Participant>) {
         val objArr: ArrayList<Any> = ArrayList()
         for (p in arr) {
             objArr.add(p as Any)
