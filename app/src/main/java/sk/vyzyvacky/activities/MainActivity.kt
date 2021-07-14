@@ -1,6 +1,5 @@
 package sk.vyzyvacky.activities
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -17,19 +16,17 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
 import org.json.JSONArray
 import sk.vyzyvacky.R
-import sk.vyzyvacky.data.Data
 import sk.vyzyvacky.model.LogEntry
 import sk.vyzyvacky.model.Participant
 import sk.vyzyvacky.model.SKArrayAdapter
 import sk.vyzyvacky.utilities.DataHandler
 import sk.vyzyvacky.utilities.HttpRequestManager
 import sk.vyzyvacky.utilities.RequestType
-import java.text.SimpleDateFormat
+import java.sql.Timestamp
 import java.util.*
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
-    private var database: Data = Data()
     private lateinit var dataHandler: DataHandler
 
     private lateinit var mTextInput1: AutoCompleteTextView
@@ -37,7 +34,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var button: Button
     private lateinit var mToolbar: Toolbar
 
-    private var imported = false
     private var isViewing = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,16 +46,9 @@ class MainActivity : AppCompatActivity() {
 
         mToolbar = findViewById(R.id.toolbar)
         setSupportActionBar(mToolbar)
-    }
 
-    fun resetAdapter() {
-        // Get the string array
-        val nameList = database.namesForAdapter
-
-        // Create the adapter and set it to the AutoCompleteTextViews
-        val adapter = SKArrayAdapter(this, android.R.layout.simple_list_item_1, nameList)
-        mTextInput1.setAdapter(adapter)
-        mTextInput2.setAdapter(adapter)
+        dataHandler = DataHandler(this.applicationContext)
+        resetAdapter()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -77,6 +66,16 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun resetAdapter() {
+        // Get the string array
+        val nameList = dataHandler.getNamesForAdapter()
+
+        // Create the adapter and set it to the AutoCompleteTextViews
+        val adapter = SKArrayAdapter(this, android.R.layout.simple_list_item_1, nameList)
+        mTextInput1.setAdapter(adapter)
+        mTextInput2.setAdapter(adapter)
+    }
+
     private fun settings() {
         val view = findViewById<View>(R.id.options)
         val popup = PopupMenu(this@MainActivity, view)
@@ -87,10 +86,6 @@ class MainActivity : AppCompatActivity() {
             when (item.title.toString()) {
                 "Import" -> {
                     importDatabase()
-                }
-                "Export" -> {
-                    //TODO
-                    Toast.makeText(this, "TODO", Toast.LENGTH_SHORT).show()
                 }
                 "Zobraz databázu" -> {
                     isViewing = true
@@ -111,8 +106,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun importDatabase() {
-        dataHandler = DataHandler(this.applicationContext)
-
         HttpRequestManager.sendRequestForArray(
             this, RequestType.PARTICIPANT,
             { response: JSONArray, success: Boolean ->
@@ -127,54 +120,53 @@ class MainActivity : AppCompatActivity() {
                         val team = obj.get("team_id") as Int
 
                         participantArr.add(Participant(id, firstname, lastname, team))
+                        Toast.makeText(this, "Database imported.", Toast.LENGTH_SHORT).show()
                     }
                     dataHandler.setParticipants(participantArr)
                 } else {
                     System.out.println("Error: $response")
+                    Toast.makeText(this, "Error: Database not imported.", Toast.LENGTH_SHORT).show()
                 }
             },
         )
-
-        Toast.makeText(this, "Database imported.", Toast.LENGTH_SHORT).show()
-        //resetAdapter()
+        resetAdapter()
     }
 
     private fun showDatabase() {
         val databaseIntent = Intent(this@MainActivity, DatabaseActivity::class.java)
-        databaseIntent.putExtra("data", database)
         startActivity(databaseIntent)
     }
 
     private fun showLog() {
         val logIntent = Intent(this@MainActivity, LogActivity::class.java)
-        logIntent.putExtra("data", database)
         startActivity(logIntent)
     }
 
     private fun deleteLast() {
         //get last log index
-        val index = database.log!!.size - 1
+        val log = dataHandler.getEntries()
+        val index = log.size - 1
         if (index < 0) {
             Toast.makeText(this, "No logs to delete.", Toast.LENGTH_LONG).show()
             return
         }
 
         //get Strings
-        val last = database.log?.get(index)
-        val time = last?.time
-        val winner = last?.let { database.getFullParticipantNameByID(it.winner) }
-        val looser = last?.let { database.getFullParticipantNameByID(it.looser) }
+        val last = log.get(index)
+        val time = last.time
+        val winner = last.let { dataHandler.getFullParticipantNameByID(it.winner) }
+        val looser = last.let { dataHandler.getFullParticipantNameByID(it.looser) }
         val context: Context = this
 
         //popup
         AlertDialog.Builder(context)
             .setTitle("Delete entry")
-            .setMessage("Are you sure you want to delete this entry?\n$time $winner vs. $looser")
+            .setMessage("Are you sure you want to delete this entry?\n$time:\n$winner vs. $looser")
             // Specifying a listener allows you to take an action before dismissing the dialog.
             // The dialog is automatically dismissed when a dialog button is clicked.
             .setPositiveButton(android.R.string.yes) { _: DialogInterface?, _: Int ->
                 // Continue with delete operation
-                database.log!!.removeAt(index)
+                dataHandler.removeEntry(index)
                 Toast.makeText(context, "Last log entry removed successfully.", Toast.LENGTH_LONG)
                     .show()
             } // A null listener allows the button to dismiss the dialog and take no further action.
@@ -184,13 +176,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onClickBtn(v: View?) {
-        if (!imported) {
+        val participants = dataHandler.getParticipants()
+        if (participants.isEmpty()) {
             Toast.makeText(this, "Database not imported.", Toast.LENGTH_LONG).show()
             return
         }
 
         //get strings
-        val time = formatMillisecondsTime(System.currentTimeMillis())
+        val time = Timestamp(System.currentTimeMillis())
         val winner = mTextInput1.text.toString()
         val looser = mTextInput2.text.toString()
 
@@ -199,22 +192,18 @@ class MainActivity : AppCompatActivity() {
         mTextInput2.setText("")
 
         //test the input
-        var winnerID: String? = null
-        var looserID: String? = null
-        for (i in database.participants?.indices!!) {
-            val current = database.participants?.get(i)
-            val currentName = current?.lastname + " " + current?.firstname
+        var winnerID: Int? = null
+        var looserID: Int? = null
+        for (i in participants.indices) {
+            val current = participants.get(i)
+            val currentName = current.lastname + " " + current.firstname
             if (winner == currentName) {
                 //found winner
-                if (current != null) {
-                    winnerID = current.id
-                }
+                winnerID = current.id
             }
             if (looser == currentName) {
                 //found looser
-                if (current != null) {
-                    looserID = current.id
-                }
+                looserID = current.id
             }
         }
         if (winnerID == null || looserID == null) {
@@ -225,18 +214,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         //log an entry
-        database.addEntry(LogEntry(time, winnerID, looserID))
+        dataHandler.addEntry(LogEntry(time.toString(), winnerID, looserID))
         Toast.makeText(this, this.resources.getString(R.string.entry_added), Toast.LENGTH_LONG)
             .show()
 
         //change focus
         mTextInput1.isFocusableInTouchMode = true
         mTextInput1.requestFocus()
-    }
-
-    private fun formatMillisecondsTime(millis: Long): String {
-        @SuppressLint("SimpleDateFormat") val simpleDateFormat = SimpleDateFormat("HH:mm:ss")
-        val date = Date(millis)
-        return simpleDateFormat.format(date)
     }
 }

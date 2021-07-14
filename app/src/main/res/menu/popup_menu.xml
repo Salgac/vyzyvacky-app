@@ -4,9 +4,6 @@
             android:id="@+id/importData"
             android:title="@string/import_data" />
     <item
-            android:id="@+id/export"
-            android:title="@string/export" />
-    <item
             android:id="@+id/database_view"
             android:title="@string/database_view" />
     <item

@@ -32,8 +32,8 @@ class LogActivity : TableActivity() {
             val strings = arrayOfNulls<String>(4)
             strings[0] = i.toString()
             strings[1] = current.time
-            strings[2] = current.winner
-            strings[3] = current.looser
+            strings[2] = dataHandler.getFullParticipantNameByID(current.winner)
+            strings[3] = dataHandler.getFullParticipantNameByID(current.looser)
             //add new row into table
             newRow(table, strings, i)
         }
