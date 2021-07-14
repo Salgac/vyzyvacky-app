@@ -14,7 +14,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
+import com.android.volley.Request
 import org.json.JSONArray
+import org.json.JSONObject
 import sk.vyzyvacky.R
 import sk.vyzyvacky.model.LogEntry
 import sk.vyzyvacky.model.Participant
@@ -105,8 +107,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun importDatabase() {
-        HttpRequestManager.sendRequestForArray(
-            this, RequestType.PARTICIPANT,
+        HttpRequestManager.sendArrayRequest(
+            this, null, RequestType.PARTICIPANT, Request.Method.GET,
             { response: JSONArray, success: Boolean ->
                 if (success) {
                     val participantArr = ArrayList<Participant>()
@@ -132,7 +134,40 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun exportLogEntries() {
-        //TODO
+        val log = dataHandler.getEntries()
+        val jsonArr = JSONArray()
+
+        //write entries into JSONArray
+        for (entry in log) {
+            val obj = JSONObject()
+            obj.put("time", entry.time)
+            obj.put("winner", entry.winner)
+            obj.put("looser", entry.looser)
+
+            jsonArr.put(obj)
+        }
+
+        //send
+        HttpRequestManager.sendArrayRequest(this, jsonArr, RequestType.ENTRY, Request.Method.POST,
+            { response: JSONArray, success: Boolean ->
+                if (success) {
+                    //delete entries from database
+                    dataHandler.removeEntries()
+                    Toast.makeText(
+                        this,
+                        this.resources.getString(R.string.export_ok),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    //print error message and carry on
+                    println("Error: $response")
+                    Toast.makeText(
+                        this,
+                        this.resources.getString(R.string.export_ko),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
     }
 
     private fun showDatabase() {

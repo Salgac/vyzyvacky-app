@@ -20,7 +20,7 @@ enum class RequestType {
 class HttpRequestManager {
     companion object {
 
-        fun sendRequestForObject(
+        fun sendObjectRequest(
             context: Context,
             jsonObj: JSONObject?,
             type: RequestType,
@@ -29,10 +29,7 @@ class HttpRequestManager {
             urlExtra: String = ""
         ) {
             val que = Volley.newRequestQueue(context)
-            var url = getUrlFromType(type)
-            if (urlExtra.isNotEmpty()) {
-                url += "$urlExtra/"
-            }
+            val url = getUrlFromType(type) + urlExtra
 
             val jsonObjectRequest = object : JsonObjectRequest(
                 method, url, jsonObj,
@@ -54,16 +51,18 @@ class HttpRequestManager {
             que.add(jsonObjectRequest)
         }
 
-        fun sendRequestForArray(
+        fun sendArrayRequest(
             context: Context,
+            jsonArr: JSONArray?,
             type: RequestType,
+            method: Int,
             handlerFunction: (response: JSONArray, success: Boolean) -> Unit,
             urlExtra: String = ""
         ) {
             val que = Volley.newRequestQueue(context)
             val url = getUrlFromType(type) + urlExtra
 
-            val jsonArrayRequest = object : JsonArrayRequest(url,
+            val jsonArrayRequest = object : JsonArrayRequest(method, url, jsonArr,
                 { response ->
                     handlerFunction(response, true)
                 }, { error ->

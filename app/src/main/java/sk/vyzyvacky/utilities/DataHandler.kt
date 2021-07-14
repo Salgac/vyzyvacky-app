@@ -59,6 +59,10 @@ class DataHandler(context: Context) {
         setEntries(entries)
     }
 
+    fun removeEntries() {
+        tinyDB.putListObject(PREF_ENTRIES, ArrayList())
+    }
+
     fun getNamesForAdapter(): Array<String?> {
         val participants = getParticipants()
         val names = arrayOfNulls<String>(participants.size)
