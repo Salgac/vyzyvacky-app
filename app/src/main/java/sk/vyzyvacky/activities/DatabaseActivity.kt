@@ -1,23 +1,22 @@
 package sk.vyzyvacky.activities
 
-import android.os.Build
 import android.widget.TableLayout
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import sk.vyzyvacky.R
 import sk.vyzyvacky.utilities.DataHandler
 
 class DatabaseActivity : TableActivity() {
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     override fun init() {
         val table = findViewById<TableLayout>(R.id.table_main)
-        header = arrayOf("ID", "Meno", "Priezvisko", "Team")
-        setHeader()
+
+        val header = arrayOf("ID", "Meno", "Priezvisko", "Team")
+        setHeader(header)
 
         val dataHandler = DataHandler(this.applicationContext)
         val data = dataHandler.getParticipants()
 
+        //toast
         val dataSize = data.size
         if (dataSize == 0) Toast.makeText(
             this,

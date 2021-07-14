@@ -10,21 +10,18 @@ import android.widget.TableRow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import sk.vyzyvacky.R
-import sk.vyzyvacky.data.Data
 
 abstract class TableActivity : AppCompatActivity() {
-    protected var database: Data? = null
-    protected lateinit var header: Array<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_table)
-        val intent = intent
-        database = intent.getParcelableExtra("data")
         init()
     }
 
     protected abstract fun init()
+
     protected fun newRow(table: TableLayout, strings: Array<String?>, i: Int) {
         //new table row
         val inflater = (this.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater)
@@ -45,7 +42,7 @@ abstract class TableActivity : AppCompatActivity() {
         table.addView(newRow)
     }
 
-    protected fun setHeader() {
+    protected fun setHeader(header: Array<String>) {
         val layout = findViewById<TableRow>(R.id.header_row)
         for (i in 0 until layout.childCount) {
             val view = layout.getChildAt(i)
