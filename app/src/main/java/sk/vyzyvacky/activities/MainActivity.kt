@@ -15,15 +15,22 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
+import org.json.JSONArray
 import sk.vyzyvacky.R
 import sk.vyzyvacky.data.Data
 import sk.vyzyvacky.model.LogEntry
+import sk.vyzyvacky.model.Participant
 import sk.vyzyvacky.model.SKArrayAdapter
+import sk.vyzyvacky.utilities.DataHandler
+import sk.vyzyvacky.utilities.HttpRequestManager
+import sk.vyzyvacky.utilities.RequestType
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
     private var database: Data = Data()
+    private lateinit var dataHandler: DataHandler
 
     private lateinit var mTextInput1: AutoCompleteTextView
     private lateinit var mTextInput2: AutoCompleteTextView
@@ -79,9 +86,7 @@ class MainActivity : AppCompatActivity() {
         popup.setOnMenuItemClickListener { item: MenuItem ->
             when (item.title.toString()) {
                 "Import" -> {
-                    //TODO
-                    Toast.makeText(this, "TODO", Toast.LENGTH_SHORT).show()
-                    //resetAdapter()
+                    importDatabase()
                 }
                 "Export" -> {
                     //TODO
@@ -103,6 +108,35 @@ class MainActivity : AppCompatActivity() {
             true
         }
         popup.show()
+    }
+
+    private fun importDatabase() {
+        dataHandler = DataHandler(this.applicationContext)
+
+        HttpRequestManager.sendRequestForArray(
+            this, RequestType.PARTICIPANT,
+            { response: JSONArray, success: Boolean ->
+                if (success) {
+                    val participantArr = ArrayList<Participant>()
+                    for (i in 0 until response.length()) {
+                        val obj = response.getJSONObject(i)
+
+                        val firstname = obj.get("firstName") as String
+                        val lastname = obj.get("lastName") as String
+                        val id = obj.get("id") as Int
+                        val team = obj.get("team_id") as Int
+
+                        participantArr.add(Participant(id, firstname, lastname, team))
+                    }
+                    dataHandler.setParticipants(participantArr)
+                } else {
+                    System.out.println("Error: $response")
+                }
+            },
+        )
+
+        Toast.makeText(this, "Database imported.", Toast.LENGTH_SHORT).show()
+        //resetAdapter()
     }
 
     private fun showDatabase() {

@@ -29,6 +29,9 @@
     <string name="export_ko">Export failed</string>
     <string name="id">ID</string>
     <string name="time">Time</string>
+    <string name="error_connection">No internet connection</string>
+    <string name="error_server">Could not connect to server</string>
+    <string name="error_timeout">Connection timeout</string>
 
 
 </resources>
