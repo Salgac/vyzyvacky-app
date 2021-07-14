@@ -3,6 +3,6 @@
     <item
             android:id="@+id/options"
             android:icon="@drawable/ic_baseline_more_horiz_24"
-            android:title="@string/dummy_text"
+            android:title="@string/placeholder_text"
             app:showAsAction="ifRoom|withText" />
 </menu>

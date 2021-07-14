@@ -34,8 +34,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var button: Button
     private lateinit var mToolbar: Toolbar
 
-    private var isViewing = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -84,20 +82,21 @@ class MainActivity : AppCompatActivity() {
         //listen for click
         popup.setOnMenuItemClickListener { item: MenuItem ->
             when (item.title.toString()) {
-                "Import" -> {
+                this.resources.getString(R.string.menu_export) -> {
+                    exportLogEntries()
+                }
+                this.resources.getString(R.string.menu_import) -> {
                     importDatabase()
                 }
-                "Zobraz databázu" -> {
-                    isViewing = true
+                this.resources.getString(R.string.menu_database_view) -> {
                     showDatabase()
-                    isViewing = false
                 }
-                "Zobraz log" -> {
-                    isViewing = true
+                this.resources.getString(R.string.menu_log_view) -> {
                     showLog()
-                    isViewing = false
                 }
-                "Zmaž posledný" -> deleteLast()
+                this.resources.getString(R.string.menu_log_delete) -> {
+                    deleteLast()
+                }
                 else -> return@setOnMenuItemClickListener true
             }
             true
@@ -124,12 +123,16 @@ class MainActivity : AppCompatActivity() {
                     }
                     dataHandler.setParticipants(participantArr)
                 } else {
-                    System.out.println("Error: $response")
+                    println("Error: $response")
                     Toast.makeText(this, "Error: Database not imported.", Toast.LENGTH_SHORT).show()
                 }
             },
         )
         resetAdapter()
+    }
+
+    private fun exportLogEntries() {
+        //TODO
     }
 
     private fun showDatabase() {
@@ -152,7 +155,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         //get Strings
-        val last = log.get(index)
+        val last = log[index]
         val time = last.time
         val winner = last.let { dataHandler.getFullParticipantNameByID(it.winner) }
         val looser = last.let { dataHandler.getFullParticipantNameByID(it.looser) }
@@ -160,8 +163,8 @@ class MainActivity : AppCompatActivity() {
 
         //popup
         AlertDialog.Builder(context)
-            .setTitle("Delete entry")
-            .setMessage("Are you sure you want to delete this entry?\n$time:\n$winner vs. $looser")
+            .setTitle("Zmazať posledný?")
+            .setMessage("Si si istý že chceš zmazať tento log?\n$time:\n$winner vs. $looser")
             // Specifying a listener allows you to take an action before dismissing the dialog.
             // The dialog is automatically dismissed when a dialog button is clicked.
             .setPositiveButton(android.R.string.yes) { _: DialogInterface?, _: Int ->
@@ -195,7 +198,7 @@ class MainActivity : AppCompatActivity() {
         var winnerID: Int? = null
         var looserID: Int? = null
         for (i in participants.indices) {
-            val current = participants.get(i)
+            val current = participants[i]
             val currentName = current.lastname + " " + current.firstname
             if (winner == currentName) {
                 //found winner
