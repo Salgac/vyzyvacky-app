@@ -3,6 +3,7 @@ package sk.vyzyvacky.activities
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         button = findViewById(R.id.submit_button)
 
         mToolbar = findViewById(R.id.toolbar)
+        mToolbar.setTitleTextColor(Color.parseColor("#FFFFFF"))
         setSupportActionBar(mToolbar)
 
         dataHandler = DataHandler(this.applicationContext)

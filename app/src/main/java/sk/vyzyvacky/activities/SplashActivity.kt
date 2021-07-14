@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import sk.vyzyvacky.R
+import sk.vyzyvacky.utilities.DataHandler
 
 class SplashActivity : AppCompatActivity() {
 
@@ -14,7 +15,9 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        //TODO connection logic in here
+        //update participant database
+        val dataHandler = DataHandler(this.applicationContext)
+        dataHandler.importParticipants()
 
         Handler().postDelayed({
             startActivity(Intent(this, MainActivity::class.java))
