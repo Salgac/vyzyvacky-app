@@ -45,7 +45,7 @@ class HttpRequestManager {
                         handlerFunction(JSONObject(), false)
                 }) {
                 override fun getHeaders(): MutableMap<String, String> {
-                    return defaultHeaders()
+                    return defaultHeaders(context)
                 }
             }
             que.add(jsonObjectRequest)
@@ -72,15 +72,16 @@ class HttpRequestManager {
                         handlerFunction(JSONArray(), false)
                 }) {
                 override fun getHeaders(): MutableMap<String, String> {
-                    return defaultHeaders()
+                    return defaultHeaders(context)
                 }
             }
             que.add(jsonArrayRequest)
         }
 
-        fun defaultHeaders(): MutableMap<String, String> {
+        fun defaultHeaders(context: Context): MutableMap<String, String> {
             val params: MutableMap<String, String> = HashMap()
             params["Content-Type"] = "application/json"
+            params["Authorization"] = DataHandler(context).getToken()
             return params
         }
 

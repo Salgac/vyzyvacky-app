@@ -8,19 +8,19 @@ import sk.vyzyvacky.R
 import sk.vyzyvacky.utilities.DataHandler
 
 class SplashActivity : AppCompatActivity() {
+    private lateinit var dataHandler: DataHandler
 
-    private val SPLASH_TIME_OUT: Long = 1500
+    private val SPLASH_TIME_OUT: Long = 500
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
         //update participant database
-        val dataHandler = DataHandler(this.applicationContext)
-        dataHandler.importParticipants()
+        dataHandler = DataHandler(this.applicationContext)
 
         Handler().postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }, SPLASH_TIME_OUT)
     }

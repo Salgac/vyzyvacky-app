@@ -11,11 +11,20 @@ import sk.vyzyvacky.model.Participant
 import java.util.*
 
 class DataHandler(context: Context) {
+    private val PREF_TOKEN: String = "auth_token"
     private val PREF_PARTICIPANTS: String = "participants"
     private val PREF_ENTRIES: String = "entries"
 
     private var tinyDB = TinyDB(context)
     private val ctx = context
+
+    fun setToken(token: String) {
+        tinyDB.putString(PREF_TOKEN, token)
+    }
+
+    fun getToken(): String {
+        return tinyDB.getString(PREF_TOKEN)
+    }
 
     fun importParticipants() {
         HttpRequestManager.sendArrayRequest(
