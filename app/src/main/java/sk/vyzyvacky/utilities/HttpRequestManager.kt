@@ -14,7 +14,7 @@ import org.json.JSONObject
 import sk.vyzyvacky.R
 
 enum class RequestType {
-    ENTRY, PARTICIPANT
+    LOGIN, ENTRY, PARTICIPANT
 }
 
 class HttpRequestManager {
@@ -86,6 +86,7 @@ class HttpRequestManager {
 
         private fun getUrlFromType(type: RequestType): String {
             return when (type) {
+                RequestType.LOGIN -> Urls.LOGIN
                 RequestType.ENTRY -> Urls.ENTRY
                 RequestType.PARTICIPANT -> Urls.PARTICIPANT
             }

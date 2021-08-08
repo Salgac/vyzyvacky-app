@@ -2,36 +2,47 @@
     <string name="app_name">Vyzývačky 2.1</string>
     <string name="splash">TYMIAN 2021</string>
 
+    <!-- Login screen -->
+    <string name="game_code">game code</string>
+    <string name="password">password</string>
+    <string name="log_in">Log In</string>
+
+    <string name="error_pass_length">Password must be at least 4 characters long</string>
+    <string name="error_auth">Game code or password are incorrect</string>
+
+    <!-- Main screen -->
     <string name="tooltip">Zaznamenaj súboj:</string>
     <string name="winner">Víťaz:</string>
     <string name="looser">Porazený:</string>
+    <string name="submit">Zaznamenaj</string>
 
+    <!-- Toasts -->
     <string name="dummy_text"> </string>
     <string name="placeholder_text">Template</string>
     <string name="not_imported">Import a database before use</string>
     <string name="no_database">No database imported</string>
     <string name="no_entries">No entries to show</string>
 
-    <string name="submit">Zaznamenaj</string>
+    <string name="import_ok">Import successful</string>
+    <string name="import_ko">Import failed</string>
+    <string name="export_ok">Export successful</string>
+    <string name="export_ko">Export failed</string>
+
+    <string name="error_connection">No internet connection</string>
+    <string name="error_server">Could not connect to server</string>
+    <string name="error_timeout">Connection timeout</string>
+
     <string name="entry_added">Súboj bol zaznamenaný</string>
     <string name="entry_failed">Chyba! Súboj nebol zaznamenaný</string>
 
+    <!-- Menu items -->
     <string name="menu_import">Import</string>
     <string name="menu_export">Export</string>
     <string name="menu_database_view">Zobraz databázu</string>
     <string name="menu_log_view">Zobraz log</string>
     <string name="menu_log_delete">Zmaž posledný</string>
 
-    <string name="import_ok">Import successful</string>
-    <string name="import_ko">Import failed</string>
-
-    <string name="export_ok">Export successful</string>
-    <string name="export_ko">Export failed</string>
     <string name="id">ID</string>
     <string name="time">Time</string>
-    <string name="error_connection">No internet connection</string>
-    <string name="error_server">Could not connect to server</string>
-    <string name="error_timeout">Connection timeout</string>
-
 
 </resources>
