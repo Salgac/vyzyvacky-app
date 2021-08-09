@@ -55,6 +55,9 @@ dependencies {
     implementation "androidx.core:core-ktx:1.6.0"
     implementation "com.google.android.material:material:1.4.0"
 
+    implementation "com.journeyapps:zxing-android-embedded:3.1.0@aar"
+    implementation "com.google.zxing:core:3.2.1"
+
     implementation files('libs/gson-2.4.jar')
 }
 repositories {

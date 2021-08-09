@@ -46,7 +46,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginStart="15dp"
-                        android:hint="@string/game_code"
+                        android:hint="@string/login_game_code"
                         android:inputType="textCapCharacters"
                         android:maxLength="6"
                         android:background="#F2F2F2" />
@@ -67,7 +67,7 @@
                         android:layout_height="50dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginStart="15dp"
-                        android:hint="@string/password"
+                        android:hint="@string/login_password"
                         android:inputType="textPassword"
                         android:maxLength="10"
                         android:background="#F2F2F2" />
@@ -75,8 +75,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-                android:id="@+id/login_button"
+        <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_below="@+id/inputLayout"
@@ -84,12 +83,40 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="40dp"
-                android:background="@color/colorPrimary"
-                android:enabled="false"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:text="@string/log_in"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                tools:ignore="UnusedAttribute" />
+                android:orientation="horizontal"
+                android:layout_alignParentEnd="true">
+
+            <ImageButton
+                    android:id="@+id/qr_button"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimary"
+                    android:src="@drawable/ic_round_qr_code_scanner_24"
+                    android:enabled="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/login_qr_button"
+                    tools:ignore="UnusedAttribute" />
+
+            <TextView
+                    android:id="@+id/dummyView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/qr_button"
+                    android:paddingStart="15dp"
+                    tools:ignore="RtlSymmetry" />
+
+            <Button
+                    android:id="@+id/login_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toEndOf="@+id/dummyView"
+                    android:background="@color/colorPrimary"
+                    android:enabled="false"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:text="@string/login_button"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    tools:ignore="UnusedAttribute" />
+        </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

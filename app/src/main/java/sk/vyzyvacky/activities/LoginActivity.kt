@@ -2,20 +2,26 @@ package sk.vyzyvacky.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import kotlinx.android.synthetic.main.activity_login.*
+import org.json.JSONException
 import org.json.JSONObject
 import sk.vyzyvacky.R
 import sk.vyzyvacky.model.Game
 import sk.vyzyvacky.utilities.DataHandler
 import sk.vyzyvacky.utilities.LoginRequest
+import sk.vyzyvacky.utilities.QrCodeScanner
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var dataHandler: DataHandler
 
     private val GAME_CODE_LENGTH: Int = 1 + 5
     private val MIN_PASSWORD_LENGTH: Int = 4
+
+    private val CODE_KEY: String = "c"
+    private val PASSWORD_KEY: String = "p"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +55,32 @@ class LoginActivity : AppCompatActivity() {
                     passwordField.text.toString().trim()
                 )
             }
+        }
+
+        qr_button.setOnClickListener {
+            //prevent button spam
+            qr_button.isEnabled = false
+            QrCodeScanner.scan(this, resources)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val jsonObject = QrCodeScanner.getOutput(requestCode, resultCode, data)
+        if (jsonObject == null) {
+            Toast.makeText(this, resources.getText(R.string.error_qr_wrong), Toast.LENGTH_SHORT)
+                .show()
+            return
+        }
+        try {
+            val code = jsonObject.getString(CODE_KEY)
+            val password = jsonObject.getString(PASSWORD_KEY)
+            sendRequest(code, password)
+        } catch (e: JSONException) {
+            Toast.makeText(this, resources.getText(R.string.error_qr_damaged), Toast.LENGTH_SHORT)
+                .show()
+            qr_button.isEnabled = true
+            return
         }
     }
 

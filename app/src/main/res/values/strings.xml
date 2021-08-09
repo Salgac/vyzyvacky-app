@@ -2,12 +2,16 @@
     <string name="app_name">Vyzývačky 2.1</string>
 
     <!-- Login screen -->
-    <string name="game_code">game code</string>
-    <string name="password">password</string>
-    <string name="log_in">Log In</string>
+    <string name="login_game_code">game code</string>
+    <string name="login_password">password</string>
+    <string name="login_button">Log In</string>
+    <string name="login_qr_button">Log In with QR code</string>
+    <string name="login_qr_prompt">"Place a game barcode inside the viewfinder rectangle to scan it"</string>
 
     <string name="error_pass_length">Password must be at least 4 characters long</string>
     <string name="error_auth">Game code or password are incorrect</string>
+    <string name="error_qr_wrong">Scanned QR code is not a game code</string>
+    <string name="error_qr_damaged">Scanned QR code is damaged, please retry</string>
 
     <!-- Splash screen -->
     <string name="splash">TYMIAN 2021</string>
