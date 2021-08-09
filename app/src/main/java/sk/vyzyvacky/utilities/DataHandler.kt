@@ -61,13 +61,13 @@ class DataHandler(context: Context) {
                         val color = obj.get("color") as String
 
                         participantArr.add(Participant(id, firstname, lastname, team, color))
-                        Toast.makeText(
-                            ctx,
-                            ctx.resources.getString(R.string.import_ok),
-                            Toast.LENGTH_SHORT
-                        ).show()
                     }
                     setParticipants(participantArr)
+                    Toast.makeText(
+                        ctx,
+                        ctx.resources.getString(R.string.import_ok),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
                     println("Error: $response")
                     Toast.makeText(
