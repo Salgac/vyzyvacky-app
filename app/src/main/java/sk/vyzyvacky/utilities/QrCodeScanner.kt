@@ -34,7 +34,7 @@ class QrCodeScanner {
                     }
                 }
             }
-            return null
+            return JSONObject()
         }
     }
 }

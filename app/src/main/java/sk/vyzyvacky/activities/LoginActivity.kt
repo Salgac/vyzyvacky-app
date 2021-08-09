@@ -67,21 +67,28 @@ class LoginActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val jsonObject = QrCodeScanner.getOutput(requestCode, resultCode, data)
-        if (jsonObject == null) {
+
+        if (jsonObject != null) {
+            if (jsonObject.length() != 0) {
+                try {
+                    val code = jsonObject.getString(CODE_KEY)
+                    val password = jsonObject.getString(PASSWORD_KEY)
+                    return sendRequest(code, password)
+                } catch (e: JSONException) {
+                    Toast.makeText(this,
+                        resources.getText(R.string.error_qr_damaged),
+                        Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        } else {
             Toast.makeText(this, resources.getText(R.string.error_qr_wrong), Toast.LENGTH_SHORT)
                 .show()
-            return
         }
-        try {
-            val code = jsonObject.getString(CODE_KEY)
-            val password = jsonObject.getString(PASSWORD_KEY)
-            sendRequest(code, password)
-        } catch (e: JSONException) {
-            Toast.makeText(this, resources.getText(R.string.error_qr_damaged), Toast.LENGTH_SHORT)
-                .show()
-            qr_button.isEnabled = true
-            return
-        }
+        qr_button.isEnabled = true
+        return
+
+
     }
 
     private fun passwordLengthValidator(): Boolean {
