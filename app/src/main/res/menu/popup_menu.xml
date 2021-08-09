@@ -16,4 +16,8 @@
     <item
             android:id="@+id/log_delete"
             android:title="@string/menu_log_delete" />
+
+    <item
+            android:id="@+id/logout"
+            android:title="@string/menu_logout" />
 </menu>

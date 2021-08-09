@@ -41,6 +41,10 @@ class DataHandler(context: Context) {
         }
     }
 
+    fun removeGame() {
+        tinyDB.remove(PREF_GAME)
+    }
+
     fun importParticipants() {
         HttpRequestManager.sendArrayRequest(
             ctx, null, RequestType.PARTICIPANT, Request.Method.GET,

@@ -94,6 +94,9 @@ class MainActivity : AppCompatActivity() {
                 this.resources.getString(R.string.menu_log_delete) -> {
                     deleteLast()
                 }
+                this.resources.getString(R.string.menu_logout) -> {
+                    logout()
+                }
                 else -> return@setOnMenuItemClickListener true
             }
             true
@@ -149,8 +152,14 @@ class MainActivity : AppCompatActivity() {
                     .show()
             } // A null listener allows the button to dismiss the dialog and take no further action.
             .setNegativeButton(android.R.string.no, null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show()
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show()
+    }
+
+    private fun logout() {
+        dataHandler.removeGame()
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 
     fun onClickBtn(v: View?) {

@@ -46,6 +46,7 @@
     <string name="menu_database_view">Zobraz databázu</string>
     <string name="menu_log_view">Zobraz log</string>
     <string name="menu_log_delete">Zmaž posledný</string>
+    <string name="menu_logout">Log out</string>
 
     <string name="id">ID</string>
     <string name="time">Time</string>
