@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_splash.*
 import org.json.JSONObject
 import sk.vyzyvacky.R
 import sk.vyzyvacky.utilities.DataHandler
@@ -28,8 +29,10 @@ class SplashActivity : AppCompatActivity() {
                     //launch next activity
                     val newIntent = if (success) {
                         dataHandler.setToken(jsonObject.get("auth_token").toString())
+                        splashMessage.text = getString(R.string.splash_logging)
                         Intent(this, MainActivity::class.java)
                     } else {
+                        splashMessage.text = getString(R.string.splash_loading)
                         Intent(this, LoginActivity::class.java)
                     }
 

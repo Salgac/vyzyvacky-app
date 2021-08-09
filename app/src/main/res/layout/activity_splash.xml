@@ -34,13 +34,22 @@
             android:layout_marginTop="25dp"
             android:indeterminateTint="#FFFFFF" />
 
+    <TextView
+            android:id="@+id/splashMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/splash_placeholder"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp" />
 
     <TextView
             android:id="@+id/splashTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="50dp"
+            android:padding="30dp"
             android:text="@string/app_name"
             android:textColor="#FFFFFF"
             android:textSize="20sp"

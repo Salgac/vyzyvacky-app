@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Vyzývačky 2.1</string>
-    <string name="splash">TYMIAN 2021</string>
 
     <!-- Login screen -->
     <string name="game_code">game code</string>
@@ -9,6 +8,12 @@
 
     <string name="error_pass_length">Password must be at least 4 characters long</string>
     <string name="error_auth">Game code or password are incorrect</string>
+
+    <!-- Splash screen -->
+    <string name="splash">TYMIAN 2021</string>
+    <string name="splash_placeholder">…</string>
+    <string name="splash_loading">Loading…</string>
+    <string name="splash_logging">Logging in…</string>
 
     <!-- Main screen -->
     <string name="tooltip">Zaznamenaj súboj:</string>
