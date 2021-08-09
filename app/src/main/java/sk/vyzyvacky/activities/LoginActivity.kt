@@ -8,6 +8,7 @@ import com.android.volley.Request
 import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONObject
 import sk.vyzyvacky.R
+import sk.vyzyvacky.model.Game
 import sk.vyzyvacky.utilities.DataHandler
 import sk.vyzyvacky.utilities.HttpRequestManager
 import sk.vyzyvacky.utilities.RequestType
@@ -94,8 +95,10 @@ class LoginActivity : AppCompatActivity() {
                     login_button.isEnabled = true
                     return
                 }
-                //set token and preferences
-                dataHandler.setToken(jsonObject.get("auth_token").toString())
+
+                //set game to shared preferences
+                val game = Game(gamecode, password, jsonObject.get("auth_token").toString())
+                dataHandler.setGame(game)
 
                 //launch main activity
                 val intent = Intent(this@LoginActivity, MainActivity::class.java)

@@ -6,24 +6,33 @@ import com.android.volley.Request
 import org.json.JSONArray
 import org.json.JSONObject
 import sk.vyzyvacky.R
+import sk.vyzyvacky.model.Game
 import sk.vyzyvacky.model.LogEntry
 import sk.vyzyvacky.model.Participant
 import java.util.*
 
 class DataHandler(context: Context) {
-    private val PREF_TOKEN: String = "auth_token"
+    private val PREF_GAME: String = "game"
     private val PREF_PARTICIPANTS: String = "participants"
     private val PREF_ENTRIES: String = "entries"
 
     private var tinyDB = TinyDB(context)
     private val ctx = context
 
-    fun setToken(token: String) {
-        tinyDB.putString(PREF_TOKEN, token)
+    fun getToken(): String {
+        return if (getGame() != null) getGame()!!.token else ""
     }
 
-    fun getToken(): String {
-        return tinyDB.getString(PREF_TOKEN)
+    fun setGame(game: Game) {
+        tinyDB.putObject(PREF_GAME, game as Any)
+    }
+
+    fun getGame(): Game? {
+        return try {
+            tinyDB.getObject(PREF_GAME, Game::class.java)
+        } catch (e: NullPointerException) {
+            null
+        }
     }
 
     fun importParticipants() {
