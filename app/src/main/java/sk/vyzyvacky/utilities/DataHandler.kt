@@ -23,6 +23,12 @@ class DataHandler(context: Context) {
         return if (getGame() != null) getGame()!!.token else ""
     }
 
+    fun setToken(token: String) {
+        val game = getGame() ?: return
+        game.token = token
+        setGame(game)
+    }
+
     fun setGame(game: Game) {
         tinyDB.putObject(PREF_GAME, game as Any)
     }

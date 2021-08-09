@@ -4,14 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
-import com.android.volley.Request
 import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONObject
 import sk.vyzyvacky.R
 import sk.vyzyvacky.model.Game
 import sk.vyzyvacky.utilities.DataHandler
-import sk.vyzyvacky.utilities.HttpRequestManager
-import sk.vyzyvacky.utilities.RequestType
+import sk.vyzyvacky.utilities.LoginRequest
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var dataHandler: DataHandler
@@ -77,13 +75,10 @@ class LoginActivity : AppCompatActivity() {
 
     //function that sends requests
     private fun sendRequest(gamecode: String, password: String) {
-        val jsonObj = JSONObject()
-        jsonObj.put("code", gamecode)
-        jsonObj.put("password", password)
-
-        //send request and get response
-        HttpRequestManager.sendObjectRequest(this, jsonObj,
-            RequestType.LOGIN, Request.Method.POST,
+        LoginRequest.send(
+            this.applicationContext,
+            gamecode,
+            password,
             fun(jsonObject: JSONObject, success: Boolean) {
                 //handle errors
                 if (!success) {
@@ -95,7 +90,6 @@ class LoginActivity : AppCompatActivity() {
                     login_button.isEnabled = true
                     return
                 }
-
                 //set game to shared preferences
                 val game = Game(gamecode, password, jsonObject.get("auth_token").toString())
                 dataHandler.setGame(game)
