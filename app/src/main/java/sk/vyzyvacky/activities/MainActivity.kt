@@ -28,9 +28,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(mainToolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(true)
 
         dataHandler = DataHandler(this.applicationContext)
+
+        submit_button.setOnClickListener {
+            saveLogEntry()
+        }
+
         resetAdapter()
     }
 
@@ -150,7 +154,7 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    fun onClickBtn(v: View?) {
+    private fun saveLogEntry() {
         val participants = dataHandler.getParticipants()
         if (participants.isEmpty()) {
             Toast.makeText(this, "Database not imported.", Toast.LENGTH_LONG).show()

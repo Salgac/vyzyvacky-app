@@ -55,8 +55,7 @@
             android:id="@+id/submit_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/submit"
-            android:onClick="onClickBtn" />
+            android:text="@string/submit" />
 
     <View
             android:id="@+id/divider2"
