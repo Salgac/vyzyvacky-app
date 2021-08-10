@@ -80,5 +80,25 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="@android:color/white"
-            app:menu="@menu/menu_drawer" />
+            app:headerLayout="@layout/drawer_header"
+            app:menu="@menu/menu_drawer">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="vertical">
+
+            <Button
+                    android:id="@+id/logout_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:background="@color/colorPrimary"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:text="@string/drawer_logout"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+        </LinearLayout>
+    </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

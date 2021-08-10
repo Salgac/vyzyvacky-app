@@ -1,17 +1,11 @@
 package sk.vyzyvacky.activities
 
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import kotlinx.android.synthetic.main.activity_main.*
@@ -48,21 +42,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection in toolbar
         when (item.itemId) {
             android.R.id.home -> {
                 drawer_layout.openDrawer(GravityCompat.START)
-                return true
-            }
-            R.id.options -> {
-                settings()
                 return true
             }
         }
@@ -73,13 +57,23 @@ class MainActivity : AppCompatActivity() {
         drawerToggle = ActionBarDrawerToggle(this,
             drawer_layout,
             mainToolbar,
-            R.string.winner,
-            R.string.looser)
+            R.string.drawer_open,
+            R.string.drawer_close)
         drawerToggle.isDrawerIndicatorEnabled = true
         drawerToggle.syncState()
         drawerToggle.drawerArrowDrawable.color = ContextCompat.getColor(this, android.R.color.white)
 
         drawer_layout.addDrawerListener(drawerToggle)
+
+        //nav menu setup
+        nvView.setNavigationItemSelectedListener { menuItem ->
+            selectDrawerItem(menuItem)
+            true
+        }
+
+        logout_button.setOnClickListener {
+            logout()
+        }
     }
 
     private fun resetAdapter() {
@@ -92,37 +86,16 @@ class MainActivity : AppCompatActivity() {
         autoCompleteTextView2.setAdapter(adapter)
     }
 
-    private fun settings() {
-        val view = findViewById<View>(R.id.options)
-        val popup = PopupMenu(this@MainActivity, view)
-        popup.menuInflater.inflate(R.menu.popup_menu, popup.menu)
-
-        //listen for click
-        popup.setOnMenuItemClickListener { item: MenuItem ->
-            when (item.title.toString()) {
-                this.resources.getString(R.string.menu_export) -> {
-                    exportLogEntries()
-                }
-                this.resources.getString(R.string.menu_import) -> {
-                    importDatabase()
-                }
-                this.resources.getString(R.string.menu_database_view) -> {
-                    showDatabase()
-                }
-                this.resources.getString(R.string.menu_log_view) -> {
-                    showLog()
-                }
-                this.resources.getString(R.string.menu_log_delete) -> {
-                    deleteLast()
-                }
-                this.resources.getString(R.string.menu_logout) -> {
-                    logout()
-                }
-                else -> return@setOnMenuItemClickListener true
-            }
-            true
+    private fun selectDrawerItem(item: MenuItem) {
+        when (item.itemId) {
+            R.id.nav_view_database -> showDatabase()
+            R.id.nav_view_log -> showLog()
+            R.id.nav_import -> importDatabase()
+            R.id.nav_export -> exportLogEntries()
+            R.id.nav_settings -> showSettings()
+            R.id.nav_about -> showAbout()
         }
-        popup.show()
+        drawer_layout.closeDrawers()
     }
 
     private fun importDatabase() {
@@ -144,37 +117,12 @@ class MainActivity : AppCompatActivity() {
         startActivity(logIntent)
     }
 
-    private fun deleteLast() {
-        //get last log index
-        val log = dataHandler.getEntries()
-        val index = log.size - 1
-        if (index < 0) {
-            Toast.makeText(this, "No logs to delete.", Toast.LENGTH_LONG).show()
-            return
-        }
+    private fun showSettings() {
+        TODO()
+    }
 
-        //get Strings
-        val last = log[index]
-        val time = last.time
-        val winner = last.let { dataHandler.getFullParticipantNameByID(it.winner) }
-        val looser = last.let { dataHandler.getFullParticipantNameByID(it.looser) }
-        val context: Context = this
-
-        //popup
-        AlertDialog.Builder(context)
-            .setTitle("Zmazať posledný?")
-            .setMessage("Si si istý že chceš zmazať tento log?\n$time:\n$winner vs. $looser")
-            // Specifying a listener allows you to take an action before dismissing the dialog.
-            // The dialog is automatically dismissed when a dialog button is clicked.
-            .setPositiveButton(android.R.string.yes) { _: DialogInterface?, _: Int ->
-                // Continue with delete operation
-                dataHandler.removeEntry(index)
-                Toast.makeText(context, "Last log entry removed successfully.", Toast.LENGTH_LONG)
-                    .show()
-            } // A null listener allows the button to dismiss the dialog and take no further action.
-            .setNegativeButton(android.R.string.no, null)
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .show()
+    private fun showAbout() {
+        TODO()
     }
 
     private fun logout() {

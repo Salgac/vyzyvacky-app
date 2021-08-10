@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group
+            android:id="@+id/menu_group"
+            android:checkableBehavior="single">
         <item
-                android:id="@+id/nav_first_fragment"
-                android:title="First" />
+                android:id="@+id/nav_view_database"
+                android:title="@string/drawer_view_database" />
         <item
-                android:id="@+id/nav_second_fragment"
-                android:title="Second" />
+                android:id="@+id/nav_view_log"
+                android:title="@string/drawer_view_log" />
+    </group>
+
+    <group
+            android:id="@+id/utility_group"
+            android:checkableBehavior="single">
         <item
-                android:id="@+id/nav_third_fragment"
-                android:title="Third" />
+                android:id="@+id/nav_import"
+                android:title="@string/drawer_import" />
+        <item
+                android:id="@+id/nav_export"
+                android:title="@string/drawer_export" />
+        <item
+                android:id="@+id/nav_settings"
+                android:title="@string/drawer_settings" />
+        <item
+                android:id="@+id/nav_about"
+                android:title="@string/drawer_about" />
     </group>
 </menu>
