@@ -8,9 +8,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.titlebar_main.*
 import sk.vyzyvacky.R
@@ -22,20 +25,27 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var dataHandler: DataHandler
+    private lateinit var drawerToggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //toolbar
         setSupportActionBar(mainToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        //drawer
+        setupDrawer()
+
+        //utilities
         dataHandler = DataHandler(this.applicationContext)
+        resetAdapter()
 
+        //listeners
         submit_button.setOnClickListener {
             saveLogEntry()
         }
-
-        resetAdapter()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -45,12 +55,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
-        if (item.itemId == R.id.options) {
-            settings()
-            return true
+        // Handle item selection in toolbar
+        when (item.itemId) {
+            android.R.id.home -> {
+                drawer_layout.openDrawer(GravityCompat.START)
+                return true
+            }
+            R.id.options -> {
+                settings()
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun setupDrawer() {
+        drawerToggle = ActionBarDrawerToggle(this,
+            drawer_layout,
+            mainToolbar,
+            R.string.winner,
+            R.string.looser)
+        drawerToggle.isDrawerIndicatorEnabled = true
+        drawerToggle.syncState()
+        drawerToggle.drawerArrowDrawable.color = ContextCompat.getColor(this, android.R.color.white)
+
+        drawer_layout.addDrawerListener(drawerToggle)
     }
 
     private fun resetAdapter() {
