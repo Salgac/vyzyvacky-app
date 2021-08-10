@@ -2,24 +2,37 @@ package sk.vyzyvacky.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.drawer_header.*
+import kotlinx.android.synthetic.main.drawer_header.view.*
 import kotlinx.android.synthetic.main.titlebar_main.*
+import kotlinx.android.synthetic.main.titlebar_main.view.*
+import org.json.JSONObject
 import sk.vyzyvacky.R
 import sk.vyzyvacky.model.LogEntry
 import sk.vyzyvacky.model.SKArrayAdapter
 import sk.vyzyvacky.utilities.DataHandler
+import sk.vyzyvacky.utilities.QrCodeScanner
 import java.sql.Timestamp
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var dataHandler: DataHandler
     private lateinit var drawerToggle: ActionBarDrawerToggle
+    private lateinit var drawerHeader: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,12 +42,12 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(mainToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        //drawer
-        setupDrawer()
-
         //utilities
         dataHandler = DataHandler(this.applicationContext)
         resetAdapter()
+
+        //drawer
+        setupDrawer()
 
         //listeners
         submit_button.setOnClickListener {
@@ -73,6 +86,24 @@ class MainActivity : AppCompatActivity() {
 
         logout_button.setOnClickListener {
             logout()
+        }
+
+        //insert data into header
+        val game = dataHandler.getGame()!!
+        val qrContent = JSONObject("{\"c\":\"" + game.code + "\",\"p\":\"" + game.password + "\"}")
+        drawerHeader = nvView.getHeaderView(0)
+
+        val drawerToolbar = drawerHeader.findViewById<Toolbar>(R.id.drawerToolbar)
+        val qrImageView = drawerHeader.findViewById<ImageView>(R.id.headerQrImage)
+        val passwordTextView = drawerHeader.findViewById<TextView>(R.id.headerPassword)
+
+        drawerToolbar.title = game.code
+        qrImageView.setImageBitmap(QrCodeScanner.generate(qrContent.toString()))
+        passwordTextView.setOnClickListener {
+            passwordTextView.text = game.password
+            Handler(Looper.getMainLooper()).postDelayed({
+                passwordTextView.text = getString(R.string.drawer_pass_placeholder)
+            }, 3000)
         }
     }
 

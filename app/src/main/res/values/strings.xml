@@ -28,9 +28,10 @@
     <!-- Drawer menu -->
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
+    <string name="drawer_qr_code">Game qr code</string>
 
     <string name="drawer_code_placeholder">Game code</string>
-    <string name="drawer_pass_placeholder">Password</string>
+    <string name="drawer_pass_placeholder">Show game password</string>
 
     <string name="drawer_view_database">Competitors</string>
     <string name="drawer_view_log">Match log</string>
