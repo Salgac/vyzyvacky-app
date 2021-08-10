@@ -3,18 +3,16 @@ package sk.vyzyvacky.activities
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AutoCompleteTextView
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
-import androidx.appcompat.widget.Toolbar
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.titlebar_main.*
 import sk.vyzyvacky.R
 import sk.vyzyvacky.model.LogEntry
 import sk.vyzyvacky.model.SKArrayAdapter
@@ -25,22 +23,12 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     private lateinit var dataHandler: DataHandler
 
-    private lateinit var mTextInput1: AutoCompleteTextView
-    private lateinit var mTextInput2: AutoCompleteTextView
-    private lateinit var button: Button
-    private lateinit var mToolbar: Toolbar
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mTextInput1 = findViewById(R.id.autoCompleteTextView1)
-        mTextInput2 = findViewById(R.id.autoCompleteTextView2)
-        button = findViewById(R.id.submit_button)
-
-        mToolbar = findViewById(R.id.toolbar)
-        mToolbar.setTitleTextColor(Color.parseColor("#FFFFFF"))
-        setSupportActionBar(mToolbar)
+        setSupportActionBar(mainToolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(true)
 
         dataHandler = DataHandler(this.applicationContext)
         resetAdapter()
@@ -67,8 +55,8 @@ class MainActivity : AppCompatActivity() {
 
         // Create the adapter and set it to the AutoCompleteTextViews
         val adapter = SKArrayAdapter(this, android.R.layout.simple_list_item_1, nameList)
-        mTextInput1.setAdapter(adapter)
-        mTextInput2.setAdapter(adapter)
+        autoCompleteTextView1.setAdapter(adapter)
+        autoCompleteTextView2.setAdapter(adapter)
     }
 
     private fun settings() {
@@ -171,12 +159,12 @@ class MainActivity : AppCompatActivity() {
 
         //get strings
         val time = Timestamp(System.currentTimeMillis())
-        val winner = mTextInput1.text.toString()
-        val looser = mTextInput2.text.toString()
+        val winner = autoCompleteTextView1.text.toString()
+        val looser = autoCompleteTextView2.text.toString()
 
         //reset values of inputs
-        mTextInput1.setText("")
-        mTextInput2.setText("")
+        autoCompleteTextView1.setText("")
+        autoCompleteTextView2.setText("")
 
         //test the input
         var winnerID: Int? = null
@@ -206,7 +194,7 @@ class MainActivity : AppCompatActivity() {
             .show()
 
         //change focus
-        mTextInput1.isFocusableInTouchMode = true
-        mTextInput1.requestFocus()
+        autoCompleteTextView1.isFocusableInTouchMode = true
+        autoCompleteTextView1.requestFocus()
     }
 }
