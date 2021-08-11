@@ -6,9 +6,11 @@
             android:checkableBehavior="single">
         <item
                 android:id="@+id/nav_view_database"
+                android:icon="@drawable/ic_baseline_people_24"
                 android:title="@string/drawer_view_database" />
         <item
                 android:id="@+id/nav_view_log"
+                android:icon="@drawable/ic_baseline_list_24"
                 android:title="@string/drawer_view_log" />
     </group>
 
@@ -17,15 +19,19 @@
             android:checkableBehavior="single">
         <item
                 android:id="@+id/nav_import"
+                android:icon="@drawable/ic_baseline_cloud_download_24"
                 android:title="@string/drawer_import" />
         <item
                 android:id="@+id/nav_export"
+                android:icon="@drawable/ic_baseline_cloud_upload_24"
                 android:title="@string/drawer_export" />
         <item
                 android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_baseline_settings_24"
                 android:title="@string/drawer_settings" />
         <item
                 android:id="@+id/nav_about"
+                android:icon="@drawable/ic_baseline_info_24"
                 android:title="@string/drawer_about" />
     </group>
 </menu>
