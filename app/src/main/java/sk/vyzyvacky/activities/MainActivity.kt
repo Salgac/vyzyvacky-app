@@ -1,9 +1,11 @@
 package sk.vyzyvacky.activities
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
@@ -11,9 +13,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.drawer_header.*
@@ -24,7 +26,9 @@ import org.json.JSONObject
 import sk.vyzyvacky.R
 import sk.vyzyvacky.model.LogEntry
 import sk.vyzyvacky.model.SKArrayAdapter
+import sk.vyzyvacky.utilities.ConnectionType
 import sk.vyzyvacky.utilities.DataHandler
+import sk.vyzyvacky.utilities.NetworkUtil
 import sk.vyzyvacky.utilities.QrCodeScanner
 import java.sql.Timestamp
 import java.util.*
@@ -67,11 +71,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupDrawer() {
-        drawerToggle = ActionBarDrawerToggle(this,
+        drawerToggle = object : ActionBarDrawerToggle(this,
             drawer_layout,
             mainToolbar,
             R.string.drawer_open,
-            R.string.drawer_close)
+            R.string.drawer_close) {
+            override fun onDrawerStateChanged(newState: Int) {
+                super.onDrawerStateChanged(newState)
+                if (newState == DrawerLayout.STATE_SETTLING) {
+                    if (drawer_layout.isDrawerOpen(Gravity.LEFT)) {
+                        //closing
+                    } else {
+                        //opening
+                        updateConnectionStatus()
+                    }
+                }
+            }
+        }
         drawerToggle.isDrawerIndicatorEnabled = true
         drawerToggle.syncState()
         drawerToggle.drawerArrowDrawable.color = ContextCompat.getColor(this, android.R.color.white)
@@ -93,11 +109,11 @@ class MainActivity : AppCompatActivity() {
         val qrContent = JSONObject("{\"c\":\"" + game.code + "\",\"p\":\"" + game.password + "\"}")
         drawerHeader = nvView.getHeaderView(0)
 
-        val drawerToolbar = drawerHeader.findViewById<Toolbar>(R.id.drawerToolbar)
         val qrImageView = drawerHeader.findViewById<ImageView>(R.id.headerQrImage)
+        val codeTextView = drawerHeader.findViewById<TextView>(R.id.headerCode)
         val passwordTextView = drawerHeader.findViewById<TextView>(R.id.headerPassword)
 
-        drawerToolbar.title = game.code
+        codeTextView.text = game.code
         qrImageView.setImageBitmap(QrCodeScanner.generate(qrContent.toString()))
         passwordTextView.setOnClickListener {
             passwordTextView.text = game.password
@@ -154,6 +170,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun showAbout() {
         TODO()
+    }
+
+    private fun updateConnectionStatus() {
+        if (NetworkUtil.getConnectivityStatus(this) != ConnectionType.NOT_CONNECTED) {
+            connectionBar.text = getString(R.string.drawer_connection_ok)
+            connectionBar.setBackgroundColor(Color.GREEN)
+        } else {
+            connectionBar.text = getString(R.string.drawer_connection_ko)
+            connectionBar.setBackgroundColor(Color.RED)
+        }
     }
 
     private fun logout() {

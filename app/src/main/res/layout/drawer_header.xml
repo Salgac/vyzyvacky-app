@@ -1,25 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/drawerHeader"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark"
         android:orientation="vertical"
         android:gravity="bottom">
-
-    <androidx.appcompat.widget.Toolbar
-            android:id="@+id/drawerToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            app:titleTextColor="@android:color/white"
-            app:title="@string/drawer_code_placeholder"
-            android:theme="@style/ToolbarTheme"
-            app:titleTextAppearance="@style/Toolbar.TitleText"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <ImageView
             android:id="@+id/headerQrImage"
@@ -27,6 +14,14 @@
             android:layout_height="100dp"
             android:layout_marginStart="15dp"
             android:contentDescription="@string/drawer_qr_code" />
+
+    <TextView
+            android:id="@+id/headerCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="@string/drawer_code_placeholder"
+            android:textColor="@android:color/white" />
 
     <TextView
             android:id="@+id/headerPassword"
