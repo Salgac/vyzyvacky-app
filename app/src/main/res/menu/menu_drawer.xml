@@ -16,7 +16,7 @@
 
     <group
             android:id="@+id/utility_group"
-            android:checkableBehavior="single">
+            android:checkableBehavior="none">
         <item
                 android:id="@+id/nav_import"
                 android:icon="@drawable/ic_baseline_cloud_download_24"
@@ -25,6 +25,10 @@
                 android:id="@+id/nav_export"
                 android:icon="@drawable/ic_baseline_cloud_upload_24"
                 android:title="@string/drawer_export" />
+        <item
+                android:id="@+id/nav_qr_code"
+                android:icon="@drawable/ic_baseline_qr_code_24"
+                android:title="@string/drawer_qr_code" />
         <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_baseline_settings_24"

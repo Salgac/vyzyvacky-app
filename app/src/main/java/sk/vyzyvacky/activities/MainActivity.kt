@@ -8,7 +8,6 @@ import android.os.Looper
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -22,14 +21,12 @@ import kotlinx.android.synthetic.main.drawer_header.*
 import kotlinx.android.synthetic.main.drawer_header.view.*
 import kotlinx.android.synthetic.main.titlebar_main.*
 import kotlinx.android.synthetic.main.titlebar_main.view.*
-import org.json.JSONObject
 import sk.vyzyvacky.R
 import sk.vyzyvacky.model.LogEntry
 import sk.vyzyvacky.model.SKArrayAdapter
 import sk.vyzyvacky.utilities.ConnectionType
 import sk.vyzyvacky.utilities.DataHandler
 import sk.vyzyvacky.utilities.NetworkUtil
-import sk.vyzyvacky.utilities.QrCodeScanner
 import java.sql.Timestamp
 import java.util.*
 
@@ -106,15 +103,12 @@ class MainActivity : AppCompatActivity() {
 
         //insert data into header
         val game = dataHandler.getGame()!!
-        val qrContent = JSONObject("{\"c\":\"" + game.code + "\",\"p\":\"" + game.password + "\"}")
         drawerHeader = nvView.getHeaderView(0)
 
-        val qrImageView = drawerHeader.findViewById<ImageView>(R.id.headerQrImage)
         val codeTextView = drawerHeader.findViewById<TextView>(R.id.headerCode)
         val passwordTextView = drawerHeader.findViewById<TextView>(R.id.headerPassword)
 
         codeTextView.text = game.code
-        qrImageView.setImageBitmap(QrCodeScanner.generate(qrContent.toString()))
         passwordTextView.setOnClickListener {
             passwordTextView.text = game.password
             Handler(Looper.getMainLooper()).postDelayed({
@@ -139,6 +133,7 @@ class MainActivity : AppCompatActivity() {
             R.id.nav_view_log -> showLog()
             R.id.nav_import -> importDatabase()
             R.id.nav_export -> exportLogEntries()
+            R.id.nav_qr_code -> showQrCode()
             R.id.nav_settings -> showSettings()
             R.id.nav_about -> showAbout()
         }
@@ -162,6 +157,11 @@ class MainActivity : AppCompatActivity() {
     private fun showLog() {
         val logIntent = Intent(this@MainActivity, LogActivity::class.java)
         startActivity(logIntent)
+    }
+
+    private fun showQrCode() {
+        val qrIntent = Intent(this@MainActivity, QrCodeActivity::class.java)
+        startActivity(qrIntent)
     }
 
     private fun showSettings() {

@@ -17,7 +17,9 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-
+        <activity
+                android:name=".activities.QrCodeActivity"
+                android:exported="true" />
         <activity
                 android:name=".activities.SplashActivity"
                 android:screenOrientation="portrait">
@@ -27,17 +29,14 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-
         <activity
                 android:name=".activities.LoginActivity"
-                android:screenOrientation="portrait"
-                android:exported="true" />
-
+                android:exported="true"
+                android:screenOrientation="portrait" />
         <activity
                 android:name="com.journeyapps.barcodescanner.CaptureActivity"
                 android:screenOrientation="fullSensor"
                 tools:replace="screenOrientation" />
-
         <activity
                 android:name=".activities.MainActivity"
                 android:configChanges="orientation|screenSize|screenLayout|keyboardHidden" />

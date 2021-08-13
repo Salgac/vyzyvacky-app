@@ -44,16 +44,18 @@ class QrCodeScanner {
 
         fun generate(content: String): Bitmap {
             try {
-                // generate a 150x150 QR code
+                // generate a 500x500 QR code
                 val writer = QRCodeWriter()
-                val bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 300, 300)
+                val bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 500, 500)
 
                 val height: Int = bitMatrix.height
                 val width: Int = bitMatrix.width
                 val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
                 for (x in 0 until width) {
                     for (y in 0 until height) {
-                        bmp.setPixel(x, y, if (bitMatrix.get(x, y)) Color.BLACK else Color.WHITE)
+                        bmp.setPixel(x,
+                            y,
+                            if (bitMatrix.get(x, y)) Color.BLACK else Color.parseColor("#fafafa"))
                     }
                 }
                 if (bmp != null) {

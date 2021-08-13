@@ -28,7 +28,6 @@
     <!-- Drawer menu -->
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
-    <string name="drawer_qr_code">Game qr code</string>
 
     <string name="drawer_code_placeholder">Game code</string>
     <string name="drawer_pass_placeholder">Show game password</string>
@@ -37,6 +36,7 @@
     <string name="drawer_view_log">Match log</string>
     <string name="drawer_import">Import game data</string>
     <string name="drawer_export">Export game data</string>
+    <string name="drawer_qr_code">Show game QR code</string>
     <string name="drawer_settings">Settings</string>
     <string name="drawer_about">About</string>
 
@@ -44,6 +44,9 @@
     <string name="drawer_connection_ko">Status: Connection lost</string>
 
     <string name="drawer_logout">Log out</string>
+
+    <!-- QrCode screen -->
+    <string name="qr_description">Scannable game QR code</string>
 
     <!-- Toasts -->
     <string name="dummy_text"> </string>
