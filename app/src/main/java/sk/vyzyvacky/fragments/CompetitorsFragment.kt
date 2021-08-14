@@ -5,13 +5,16 @@ import sk.vyzyvacky.model.Participant
 
 class CompetitorsFragment : TableFragment() {
 
-    override fun init() {
-        headerArray = resources.getStringArray(R.array.competitors_header)
-        data = dataHandler.getParticipants() as ArrayList<Any>
-        toastString = resources.getString(R.string.competitors_error)
+    override fun getHeaderStrings(): Array<String?> {
+        return resources.getStringArray(R.array.competitors_header)
     }
 
-    override fun getData(i: Int, current: Any): Array<String?> {
+    override fun getDataObjects(): ArrayList<Any> {
+        @Suppress("UNCHECKED_CAST")
+        return dataHandler.getParticipants() as ArrayList<Any>
+    }
+
+    override fun getStringsFromObject(i: Int, current: Any): Array<String?> {
         val strings = arrayOfNulls<String>(4)
         val participantObject = current as Participant
 
@@ -20,5 +23,9 @@ class CompetitorsFragment : TableFragment() {
         strings[2] = participantObject.lastname
         strings[3] = participantObject.team
         return strings
+    }
+
+    override fun getErrorString(): String {
+        return resources.getString(R.string.competitors_error)
     }
 }

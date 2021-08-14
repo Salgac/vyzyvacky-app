@@ -21,11 +21,6 @@ abstract class TableFragment : Fragment() {
     private var layout: View? = null
     lateinit var dataHandler: DataHandler
 
-    lateinit var headerArray: Array<String>
-    lateinit var data: ArrayList<Any>
-    lateinit var toastString: String
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -33,16 +28,19 @@ abstract class TableFragment : Fragment() {
         layout = inflater.inflate(R.layout.fragment_table, container, false)
         dataHandler = DataHandler(this.requireContext())
 
-        init()
-        setHeader()
-        printData()
+        setHeader(getHeaderStrings())
+        printData(getDataObjects())
 
         return layout
     }
 
-    protected abstract fun init()
+    protected abstract fun getHeaderStrings(): Array<String?>
 
-    protected abstract fun getData(i: Int, current: Any): Array<String?>
+    protected abstract fun getDataObjects(): ArrayList<Any>
+
+    protected abstract fun getStringsFromObject(i: Int, current: Any): Array<String?>
+
+    protected abstract fun getErrorString(): String
 
     @SuppressLint("InflateParams")
     protected fun newRow(table: TableLayout, strings: Array<String?>, i: Int) {
@@ -66,30 +64,30 @@ abstract class TableFragment : Fragment() {
         table.addView(newRow)
     }
 
-    private fun setHeader() {
+    private fun setHeader(strings: Array<String?>) {
         val layout = layout!!.header_row
         for (i in 0 until layout.childCount) {
             val view = layout.getChildAt(i)
             if (view is TextView) {
-                view.text = headerArray[i]
+                view.text = strings[i]
             }
         }
     }
 
-    private fun printData() {
+    private fun printData(data: ArrayList<Any>) {
         val table = layout!!.table_main
         val dataSize = data.size
 
         //toast
         if (dataSize == 0) Toast.makeText(
             this.requireContext(),
-            toastString,
+            getErrorString(),
             Toast.LENGTH_SHORT
         ).show()
 
         //print entries
         for (i in 0 until dataSize) {
-            val strings = getData(i, data[i])
+            val strings = getStringsFromObject(i, data[i])
             newRow(table, strings, i)
         }
     }
