@@ -19,11 +19,11 @@
     <string name="splash_loading">Loading…</string>
     <string name="splash_logging">Logging in…</string>
 
-    <!-- Main screen -->
-    <string name="tooltip">Zaznamenaj súboj:</string>
-    <string name="winner">Víťaz:</string>
-    <string name="looser">Porazený:</string>
-    <string name="submit">Zaznamenaj</string>
+    <!-- Match fragment screen -->
+    <string name="match_tooltip">Create a match:</string>
+    <string name="match_winner">Winner:</string>
+    <string name="match_looser">Looser:</string>
+    <string name="match_submit">Submit</string>
 
     <!-- Drawer menu -->
     <string name="drawer_open">Open drawer</string>
@@ -66,7 +66,6 @@
 
     <string name="entry_added">Súboj bol zaznamenaný</string>
     <string name="entry_failed">Chyba! Súboj nebol zaznamenaný</string>
-
 
     <string name="id">ID</string>
     <string name="time">Time</string>

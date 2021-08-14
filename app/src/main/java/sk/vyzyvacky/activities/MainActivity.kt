@@ -9,31 +9,31 @@ import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.drawer_header.*
 import kotlinx.android.synthetic.main.drawer_header.view.*
+import kotlinx.android.synthetic.main.fragment_match.*
 import kotlinx.android.synthetic.main.titlebar_main.*
 import kotlinx.android.synthetic.main.titlebar_main.view.*
 import sk.vyzyvacky.R
-import sk.vyzyvacky.model.LogEntry
-import sk.vyzyvacky.model.SKArrayAdapter
+import sk.vyzyvacky.fragments.MatchFragment
 import sk.vyzyvacky.utilities.ConnectionType
 import sk.vyzyvacky.utilities.DataHandler
 import sk.vyzyvacky.utilities.NetworkUtil
-import java.sql.Timestamp
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var dataHandler: DataHandler
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private lateinit var drawerHeader: View
+    private lateinit var currentFragment: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,15 +45,12 @@ class MainActivity : AppCompatActivity() {
 
         //utilities
         dataHandler = DataHandler(this.applicationContext)
-        resetAdapter()
 
         //drawer
         setupDrawer()
 
-        //listeners
-        submit_button.setOnClickListener {
-            saveLogEntry()
-        }
+        //set fragment
+        setNewFragment(MatchFragment())
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -65,6 +62,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun setNewFragment(fragment: Fragment) {
+        currentFragment = fragment
+
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, fragment)
+        transaction.commit()
     }
 
     private fun setupDrawer() {
@@ -117,16 +122,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun resetAdapter() {
-        // Get the string array
-        val nameList = dataHandler.getNamesForAdapter()
-
-        // Create the adapter and set it to the AutoCompleteTextViews
-        val adapter = SKArrayAdapter(this, android.R.layout.simple_list_item_1, nameList)
-        autoCompleteTextView1.setAdapter(adapter)
-        autoCompleteTextView2.setAdapter(adapter)
-    }
-
     private fun selectDrawerItem(item: MenuItem) {
         when (item.itemId) {
             R.id.nav_view_database -> showDatabase()
@@ -142,7 +137,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun importDatabase() {
         dataHandler.importParticipants()
-        resetAdapter()
+
+        if (currentFragment is MatchFragment)
+            (currentFragment as MatchFragment).resetAdapter()
     }
 
     private fun exportLogEntries() {
@@ -186,53 +183,5 @@ class MainActivity : AppCompatActivity() {
         dataHandler.removeGame()
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
-    }
-
-    private fun saveLogEntry() {
-        val participants = dataHandler.getParticipants()
-        if (participants.isEmpty()) {
-            Toast.makeText(this, "Database not imported.", Toast.LENGTH_LONG).show()
-            return
-        }
-
-        //get strings
-        val time = Timestamp(System.currentTimeMillis())
-        val winner = autoCompleteTextView1.text.toString()
-        val looser = autoCompleteTextView2.text.toString()
-
-        //reset values of inputs
-        autoCompleteTextView1.setText("")
-        autoCompleteTextView2.setText("")
-
-        //test the input
-        var winnerID: Int? = null
-        var looserID: Int? = null
-        for (i in participants.indices) {
-            val current = participants[i]
-            val currentName = current.lastname + " " + current.firstname
-            if (winner == currentName) {
-                //found winner
-                winnerID = current.id
-            }
-            if (looser == currentName) {
-                //found looser
-                looserID = current.id
-            }
-        }
-        if (winnerID == null || looserID == null) {
-            //invalid entry, abort
-            Toast.makeText(this, this.resources.getString(R.string.entry_failed), Toast.LENGTH_LONG)
-                .show()
-            return
-        }
-
-        //log an entry
-        dataHandler.addEntry(LogEntry(time.toString(), winnerID, looserID))
-        Toast.makeText(this, this.resources.getString(R.string.entry_added), Toast.LENGTH_LONG)
-            .show()
-
-        //change focus
-        autoCompleteTextView1.isFocusableInTouchMode = true
-        autoCompleteTextView1.requestFocus()
     }
 }
