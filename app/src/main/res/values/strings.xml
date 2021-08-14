@@ -25,6 +25,24 @@
     <string name="match_looser">Looser:</string>
     <string name="match_submit">Submit</string>
 
+    <!-- Competitors fragment screen -->
+    <string-array name="competitors_header">
+        <item>ID</item>
+        <item>First name</item>
+        <item>Last name</item>
+        <item>Team</item>
+    </string-array>
+    <string name="competitors_error">No database imported</string>
+
+    <!-- Log fragment screen -->
+    <string-array name="log_header">
+        <item>ID</item>
+        <item>Time</item>
+        <item>Winner</item>
+        <item>Looser</item>
+    </string-array>
+    <string name="log_error">No entries to show</string>
+
     <!-- Drawer menu -->
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
@@ -53,8 +71,6 @@
     <string name="dummy_text"> </string>
     <string name="placeholder_text">Template</string>
     <string name="not_imported">Import a database before use</string>
-    <string name="no_database">No database imported</string>
-    <string name="no_entries">No entries to show</string>
 
     <string name="import_ok">Import successful</string>
     <string name="import_ko">Import failed</string>

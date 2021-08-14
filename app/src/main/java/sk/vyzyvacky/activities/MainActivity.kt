@@ -23,6 +23,8 @@ import kotlinx.android.synthetic.main.fragment_match.*
 import kotlinx.android.synthetic.main.titlebar_main.*
 import kotlinx.android.synthetic.main.titlebar_main.view.*
 import sk.vyzyvacky.R
+import sk.vyzyvacky.fragments.CompetitorsFragment
+import sk.vyzyvacky.fragments.LogFragment
 import sk.vyzyvacky.fragments.MatchFragment
 import sk.vyzyvacky.utilities.ConnectionType
 import sk.vyzyvacky.utilities.DataHandler
@@ -125,8 +127,8 @@ class MainActivity : AppCompatActivity() {
     private fun selectDrawerItem(item: MenuItem) {
         when (item.itemId) {
             R.id.nav_view_matchmaking -> setNewFragment(MatchFragment())
-            R.id.nav_view_database -> showDatabase()
-            R.id.nav_view_log -> showLog()
+            R.id.nav_view_database -> setNewFragment(CompetitorsFragment())
+            R.id.nav_view_log -> setNewFragment(LogFragment())
             R.id.nav_import -> importDatabase()
             R.id.nav_export -> exportLogEntries()
             R.id.nav_qr_code -> showQrCode()
@@ -145,16 +147,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun exportLogEntries() {
         dataHandler.exportEntries()
-    }
-
-    private fun showDatabase() {
-        val databaseIntent = Intent(this@MainActivity, DatabaseActivity::class.java)
-        startActivity(databaseIntent)
-    }
-
-    private fun showLog() {
-        val logIntent = Intent(this@MainActivity, LogActivity::class.java)
-        startActivity(logIntent)
     }
 
     private fun showQrCode() {
