@@ -32,6 +32,7 @@
     <string name="drawer_code_placeholder">Game code</string>
     <string name="drawer_pass_placeholder">Show game password</string>
 
+    <string name="drawer_view_matchmaking">Matchmaking</string>
     <string name="drawer_view_database">Competitors</string>
     <string name="drawer_view_log">Match log</string>
     <string name="drawer_import">Import game data</string>

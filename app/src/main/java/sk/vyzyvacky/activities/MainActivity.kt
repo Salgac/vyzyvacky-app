@@ -124,6 +124,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun selectDrawerItem(item: MenuItem) {
         when (item.itemId) {
+            R.id.nav_view_matchmaking -> setNewFragment(MatchFragment())
             R.id.nav_view_database -> showDatabase()
             R.id.nav_view_log -> showLog()
             R.id.nav_import -> importDatabase()

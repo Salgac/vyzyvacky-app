@@ -5,6 +5,10 @@
             android:id="@+id/menu_group"
             android:checkableBehavior="single">
         <item
+                android:id="@+id/nav_view_matchmaking"
+                android:icon="@drawable/ic_baseline_add_box_24"
+                android:title="@string/drawer_view_matchmaking" />
+        <item
                 android:id="@+id/nav_view_database"
                 android:icon="@drawable/ic_baseline_people_24"
                 android:title="@string/drawer_view_database" />
