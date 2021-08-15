@@ -8,24 +8,28 @@ import java.util.*
 
 class LogFragment : TableFragment() {
 
+    private var listSize: Int = 0
+
     override fun getHeaderStrings(): Array<String?> {
         return resources.getStringArray(R.array.log_header)
     }
 
-    override fun getDataObjects(): ArrayList<Any> {
+    override fun getDataObjects(): MutableList<Any> {
         @Suppress("UNCHECKED_CAST")
-        return dataHandler.getEntries() as ArrayList<Any>
+        val list = dataHandler.getEntries() as MutableList<Any>
+        listSize = list.size
+        return list.asReversed()
     }
 
     override fun getStringsFromObject(i: Int, current: Any): Array<String?> {
         val strings = arrayOfNulls<String>(5)
         val logObject = current as LogEntry
 
-        strings[0] = i.toString()
+        strings[0] = (listSize - i).toString()
         strings[1] = timeInReadableFormat(logObject.time)
         strings[2] = dataHandler.getFullParticipantNameByID(logObject.winner)
         strings[3] = dataHandler.getFullParticipantNameByID(logObject.looser)
-        strings[4] = ""
+        strings[4] = logObject.sent.toString()
         return strings
     }
 

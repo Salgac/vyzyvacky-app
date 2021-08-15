@@ -9,7 +9,6 @@ import sk.vyzyvacky.R
 import sk.vyzyvacky.model.Game
 import sk.vyzyvacky.model.LogEntry
 import sk.vyzyvacky.model.Participant
-import java.util.*
 
 class DataHandler(context: Context) {
     private val PREF_GAME: String = "game"
@@ -82,24 +81,28 @@ class DataHandler(context: Context) {
 
     fun exportEntries() {
         val log = getEntries()
+        val entriesToSend: ArrayList<LogEntry> = ArrayList()
         val jsonArr = JSONArray()
 
         //write entries into JSONArray
-        for (entry in log) {
-            val obj = JSONObject()
-            obj.put("time", entry.time)
-            obj.put("winner", entry.winner)
-            obj.put("looser", entry.looser)
+        log.forEach { entry ->
+            if (!entry.sent) {
+                val obj = JSONObject()
+                obj.put("time", entry.time)
+                obj.put("winner", entry.winner)
+                obj.put("looser", entry.looser)
 
-            jsonArr.put(obj)
+                entriesToSend.add(entry)
+                jsonArr.put(obj)
+            }
         }
 
         //send
         HttpRequestManager.sendArrayRequest(ctx, jsonArr, RequestType.ENTRY, Request.Method.POST,
             { response: JSONArray, success: Boolean ->
                 if (success) {
-                    //delete entries from database
-                    removeEntries()
+                    //delete mark entries as sent
+                    markEntriesAsSent(entriesToSend)
                     Toast.makeText(
                         ctx,
                         ctx.resources.getString(R.string.export_ok),
@@ -167,6 +170,21 @@ class DataHandler(context: Context) {
 
     fun removeEntries() {
         tinyDB.putListObject(PREF_ENTRIES, ArrayList())
+    }
+
+    private fun markEntriesAsSent(sent: ArrayList<LogEntry>) {
+        if (sent.size == 0)
+            return
+
+        val entries = getEntries()
+        entries.forEach { entry ->
+            sent.forEach {
+                if (entry.time == it.time) {
+                    entry.sent = true
+                }
+            }
+        }
+        setEntries(entries)
     }
 
     fun getNamesForAdapter(): Array<String?> {

@@ -9,9 +9,9 @@ class CompetitorsFragment : TableFragment() {
         return resources.getStringArray(R.array.competitors_header)
     }
 
-    override fun getDataObjects(): ArrayList<Any> {
+    override fun getDataObjects(): MutableList<Any> {
         @Suppress("UNCHECKED_CAST")
-        return dataHandler.getParticipants() as ArrayList<Any>
+        return dataHandler.getParticipants() as MutableList<Any>
     }
 
     override fun getStringsFromObject(i: Int, current: Any): Array<String?> {

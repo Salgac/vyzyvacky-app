@@ -36,7 +36,7 @@ abstract class TableFragment : Fragment() {
 
     protected abstract fun getHeaderStrings(): Array<String?>
 
-    protected abstract fun getDataObjects(): ArrayList<Any>
+    protected abstract fun getDataObjects(): MutableList<Any>
 
     protected abstract fun getStringsFromObject(i: Int, current: Any): Array<String?>
 
@@ -74,7 +74,7 @@ abstract class TableFragment : Fragment() {
         }
     }
 
-    private fun printData(data: ArrayList<Any>) {
+    private fun printData(data: MutableList<Any>) {
         val table = layout!!.table_main
         val dataSize = data.size
 
