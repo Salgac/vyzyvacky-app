@@ -31,6 +31,7 @@
         <item>First name</item>
         <item>Last name</item>
         <item>Team</item>
+        <item>Color</item>
     </string-array>
     <string name="competitors_error">No database imported</string>
 
@@ -40,6 +41,7 @@
         <item>Time</item>
         <item>Winner</item>
         <item>Looser</item>
+        <item>Sent</item>
     </string-array>
     <string name="log_error">No entries to show</string>
 

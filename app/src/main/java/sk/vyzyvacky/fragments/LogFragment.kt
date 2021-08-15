@@ -18,13 +18,14 @@ class LogFragment : TableFragment() {
     }
 
     override fun getStringsFromObject(i: Int, current: Any): Array<String?> {
-        val strings = arrayOfNulls<String>(4)
+        val strings = arrayOfNulls<String>(5)
         val logObject = current as LogEntry
 
         strings[0] = i.toString()
         strings[1] = timeInReadableFormat(logObject.time)
         strings[2] = dataHandler.getFullParticipantNameByID(logObject.winner)
         strings[3] = dataHandler.getFullParticipantNameByID(logObject.looser)
+        strings[4] = ""
         return strings
     }
 

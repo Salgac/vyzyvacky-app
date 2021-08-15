@@ -15,13 +15,15 @@ class CompetitorsFragment : TableFragment() {
     }
 
     override fun getStringsFromObject(i: Int, current: Any): Array<String?> {
-        val strings = arrayOfNulls<String>(4)
+        val strings = arrayOfNulls<String>(5)
         val participantObject = current as Participant
 
         strings[0] = participantObject.id.toString()
         strings[1] = participantObject.firstname
         strings[2] = participantObject.lastname
         strings[3] = participantObject.team
+        strings[4] = participantObject.color
+
         return strings
     }
 

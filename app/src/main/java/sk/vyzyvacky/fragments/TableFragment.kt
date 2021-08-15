@@ -54,7 +54,7 @@ abstract class TableFragment : Fragment() {
         if (i % 2 == 0) newRow.setBackgroundColor(Color.WHITE) else newRow.setBackgroundColor(Color.LTGRAY)
 
         //print to text views
-        for (j in 0 until newRow.childCount) {
+        for (j in strings.indices) {
             val view = newRow.getChildAt(j)
             if (view is TextView) {
                 view.text = strings[j]
@@ -66,7 +66,7 @@ abstract class TableFragment : Fragment() {
 
     private fun setHeader(strings: Array<String?>) {
         val layout = layout!!.header_row
-        for (i in 0 until layout.childCount) {
+        for (i in strings.indices) {
             val view = layout.getChildAt(i)
             if (view is TextView) {
                 view.text = strings[i]
