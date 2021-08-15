@@ -2,6 +2,9 @@ package sk.vyzyvacky.fragments
 
 import sk.vyzyvacky.R
 import sk.vyzyvacky.model.LogEntry
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.util.*
 
 class LogFragment : TableFragment() {
 
@@ -19,7 +22,7 @@ class LogFragment : TableFragment() {
         val logObject = current as LogEntry
 
         strings[0] = i.toString()
-        strings[1] = logObject.time
+        strings[1] = timeInReadableFormat(logObject.time)
         strings[2] = dataHandler.getFullParticipantNameByID(logObject.winner)
         strings[3] = dataHandler.getFullParticipantNameByID(logObject.looser)
         return strings
@@ -27,5 +30,12 @@ class LogFragment : TableFragment() {
 
     override fun getErrorString(): String {
         return resources.getString(R.string.log_error)
+    }
+
+    private fun timeInReadableFormat(time: String): String {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = Timestamp.valueOf(time).time
+        val formatter = SimpleDateFormat("dd.MM.yyyy, HH:mm", Locale.getDefault())
+        return formatter.format(calendar.time)
     }
 }
