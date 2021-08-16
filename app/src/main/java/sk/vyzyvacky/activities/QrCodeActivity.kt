@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_qr_code.*
 import org.json.JSONObject
 import sk.vyzyvacky.R
-import sk.vyzyvacky.utilities.QrCodeScanner
+import sk.vyzyvacky.utilities.QrCodeManager
 import sk.vyzyvacky.utilities.data.DataHandler
 
 class QrCodeActivity : AppCompatActivity() {
@@ -22,6 +22,6 @@ class QrCodeActivity : AppCompatActivity() {
 
         val qrContent = JSONObject("{\"c\":\"" + game.code + "\",\"p\":\"" + game.password + "\"}")
 
-        qrView.setImageBitmap(QrCodeScanner.generate(qrContent.toString()))
+        qrView.setImageBitmap(QrCodeManager.generate(qrContent.toString()))
     }
 }

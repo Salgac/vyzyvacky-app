@@ -10,7 +10,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import sk.vyzyvacky.R
 import sk.vyzyvacky.model.Game
-import sk.vyzyvacky.utilities.QrCodeScanner
+import sk.vyzyvacky.utilities.QrCodeManager
 import sk.vyzyvacky.utilities.data.DataHandler
 import sk.vyzyvacky.utilities.internet.HttpRequestManager
 
@@ -60,13 +60,13 @@ class LoginActivity : AppCompatActivity() {
         qr_button.setOnClickListener {
             //prevent button spam
             qr_button.isEnabled = false
-            QrCodeScanner.scan(this, resources)
+            QrCodeManager.scan(this, resources)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val jsonObject = QrCodeScanner.getOutput(requestCode, resultCode, data)
+        val jsonObject = QrCodeManager.getOutput(requestCode, resultCode, data)
 
         if (jsonObject != null) {
             if (jsonObject.length() != 0) {

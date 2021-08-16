@@ -14,7 +14,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import sk.vyzyvacky.R
 
-class QrCodeScanner {
+class QrCodeManager {
     companion object {
         fun scan(activity: Activity, resources: Resources) {
             val scanIntegrator = IntentIntegrator(activity)
