@@ -8,8 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_splash.*
 import org.json.JSONObject
 import sk.vyzyvacky.R
-import sk.vyzyvacky.utilities.DataHandler
-import sk.vyzyvacky.utilities.LoginRequest
+import sk.vyzyvacky.utilities.data.DataHandler
+import sk.vyzyvacky.utilities.internet.LoginRequest
 
 class SplashActivity : AppCompatActivity() {
     private lateinit var dataHandler: DataHandler

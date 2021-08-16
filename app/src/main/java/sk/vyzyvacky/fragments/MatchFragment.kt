@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.fragment_match.view.*
 import sk.vyzyvacky.R
 import sk.vyzyvacky.model.LogEntry
 import sk.vyzyvacky.model.SKArrayAdapter
-import sk.vyzyvacky.utilities.DataHandler
+import sk.vyzyvacky.utilities.data.DataHandler
 import java.sql.Timestamp
 
 class MatchFragment : Fragment() {

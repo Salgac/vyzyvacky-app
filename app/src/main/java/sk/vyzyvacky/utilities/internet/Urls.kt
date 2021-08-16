@@ -1,4 +1,4 @@
-package sk.vyzyvacky.utilities
+package sk.vyzyvacky.utilities.internet
 
 class Urls {
     companion object {

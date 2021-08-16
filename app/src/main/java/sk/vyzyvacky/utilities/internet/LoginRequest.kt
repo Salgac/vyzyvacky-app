@@ -1,4 +1,4 @@
-package sk.vyzyvacky.utilities
+package sk.vyzyvacky.utilities.internet
 
 import android.content.Context
 import com.android.volley.Request

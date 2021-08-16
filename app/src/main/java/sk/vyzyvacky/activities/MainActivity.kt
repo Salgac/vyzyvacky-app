@@ -26,9 +26,9 @@ import sk.vyzyvacky.R
 import sk.vyzyvacky.fragments.CompetitorsFragment
 import sk.vyzyvacky.fragments.LogFragment
 import sk.vyzyvacky.fragments.MatchFragment
-import sk.vyzyvacky.utilities.ConnectionType
-import sk.vyzyvacky.utilities.DataHandler
-import sk.vyzyvacky.utilities.NetworkUtil
+import sk.vyzyvacky.utilities.data.DataHandler
+import sk.vyzyvacky.utilities.internet.ConnectionType
+import sk.vyzyvacky.utilities.internet.NetworkUtil
 import java.util.*
 
 class MainActivity : AppCompatActivity() {

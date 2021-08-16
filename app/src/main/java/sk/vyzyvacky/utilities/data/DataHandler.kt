@@ -1,4 +1,4 @@
-package sk.vyzyvacky.utilities
+package sk.vyzyvacky.utilities.data
 
 import android.content.Context
 import android.widget.Toast
@@ -9,6 +9,8 @@ import sk.vyzyvacky.R
 import sk.vyzyvacky.model.Game
 import sk.vyzyvacky.model.LogEntry
 import sk.vyzyvacky.model.Participant
+import sk.vyzyvacky.utilities.internet.HttpRequestManager
+import sk.vyzyvacky.utilities.internet.RequestType
 
 class DataHandler(context: Context) {
     private val PREF_GAME: String = "game"

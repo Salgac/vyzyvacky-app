@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_table.view.*
 import sk.vyzyvacky.R
-import sk.vyzyvacky.utilities.DataHandler
+import sk.vyzyvacky.utilities.data.DataHandler
 
 abstract class TableFragment : Fragment() {
     private var layout: View? = null

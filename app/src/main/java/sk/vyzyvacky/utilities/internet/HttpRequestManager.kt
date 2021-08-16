@@ -1,4 +1,4 @@
-package sk.vyzyvacky.utilities
+package sk.vyzyvacky.utilities.internet
 
 import android.content.Context
 import android.widget.Toast
@@ -12,6 +12,7 @@ import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONObject
 import sk.vyzyvacky.R
+import sk.vyzyvacky.utilities.data.DataHandler
 
 enum class RequestType {
     LOGIN, ENTRY, PARTICIPANT
