@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.activity_splash.*
 import org.json.JSONObject
 import sk.vyzyvacky.R
 import sk.vyzyvacky.utilities.data.DataHandler
-import sk.vyzyvacky.utilities.internet.LoginRequest
+import sk.vyzyvacky.utilities.internet.HttpRequestManager
 
 class SplashActivity : AppCompatActivity() {
     private lateinit var dataHandler: DataHandler
@@ -25,7 +25,7 @@ class SplashActivity : AppCompatActivity() {
         val game = dataHandler.getGame()
         if (game != null) {
             //log in
-            LoginRequest.send(this.applicationContext, game.code, game.password,
+            HttpRequestManager.sendLoginRequest(this.applicationContext, game.code, game.password,
                 fun(jsonObject: JSONObject, success: Boolean) {
                     //set status messages
                     splashMessage.text = getString(R.string.splash_logging)

@@ -2,10 +2,7 @@ package sk.vyzyvacky.utilities.internet
 
 import android.content.Context
 import android.widget.Toast
-import com.android.volley.NetworkError
-import com.android.volley.ServerError
-import com.android.volley.TimeoutError
-import com.android.volley.VolleyError
+import com.android.volley.*
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -77,6 +74,24 @@ class HttpRequestManager {
                 }
             }
             que.add(jsonArrayRequest)
+        }
+
+        fun sendLoginRequest(
+            context: Context,
+            gamecode: String,
+            password: String,
+            responseFunction: (response: JSONObject, success: Boolean) -> Unit,
+        ) {
+            //make json object
+            val jsonObj = JSONObject()
+            jsonObj.put("code", gamecode)
+            jsonObj.put("password", password)
+
+            //send
+            sendObjectRequest(
+                context, jsonObj,
+                RequestType.LOGIN, Request.Method.POST, responseFunction
+            )
         }
 
         fun defaultHeaders(context: Context): MutableMap<String, String> {

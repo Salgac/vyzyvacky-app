@@ -12,7 +12,7 @@ import sk.vyzyvacky.R
 import sk.vyzyvacky.model.Game
 import sk.vyzyvacky.utilities.QrCodeScanner
 import sk.vyzyvacky.utilities.data.DataHandler
-import sk.vyzyvacky.utilities.internet.LoginRequest
+import sk.vyzyvacky.utilities.internet.HttpRequestManager
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var dataHandler: DataHandler
@@ -114,7 +114,7 @@ class LoginActivity : AppCompatActivity() {
 
     //function that sends requests
     private fun sendRequest(gamecode: String, password: String) {
-        LoginRequest.send(
+        HttpRequestManager.sendLoginRequest(
             this.applicationContext,
             gamecode,
             password,
